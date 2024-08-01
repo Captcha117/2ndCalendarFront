@@ -20,39 +20,7 @@
     <view class="events">
       <view v-for="(e, i) in eventList" class="event-row" :key="'event' + i">
         <view style="width: 100%">
-          <view
-            class="time-bar"
-            :class="[
-              'color' + e.gameId,
-              {
-                'left-radius': firstDayBeforeStartTime(e),
-                'right-radius': endTimeBeforeLastDay(e),
-              },
-            ]"
-            :style="{
-              width: getEventWidth(e) + 'px',
-              left: getStartTimeOffset(e) + 'px',
-            }"
-          >
-            <!-- <u--image
-              shape="circle"
-              src="/static/game/ys.png"
-              width="40px"
-              height="40px"
-            ></u--image> -->
-            <view
-              class="event-image"
-              :class="{ 'left-radius': firstDayBeforeStartTime(e) }"
-              :style="{
-                'background-image': `linear-gradient(90deg,transparent,#bacfe4), url(${e.img})`,
-              }"
-            ></view>
-            <view class="event-name">{{ e.name }}</view>
-            <view class="event-remain">
-              <text>剩余</text>
-              <count-down :time="getRemainTime(e)"></count-down>
-            </view>
-          </view>
+          <time-bar :e="e" :screenWidth="screenWidth"></time-bar>
         </view>
       </view>
     </view>
@@ -61,12 +29,11 @@
 
 <script>
 import dayjs from "@/utils/dayjs";
-import CountDown from "@/components/countDown";
+import TimeBar from "./timeBar.vue";
 export default {
-  components: { CountDown },
+  components: { TimeBar },
   data() {
     return {
-      title: "Hello",
       firstDay: dayjs().add(-1, "day").startOf("day"),
       lastDay: dayjs().add(6, "day").startOf("day"),
       screenWidth: 0,
@@ -96,50 +63,12 @@ export default {
       e.graphEndTime = Math.min(+new Date(this.lastDay), +new Date(e.endTime));
     });
   },
-  computed: {
-    widthPerHour() {
-      return this.screenWidth / 7 / 24;
-    },
-  },
   methods: {
     addDays(offset) {
       return dayjs().add(offset, "day").format("D");
     },
     getDay(offset) {
       return this.days[dayjs().add(offset, "day").day()];
-    },
-    // 事件长度
-    getEventWidth(event) {
-      if (!event.startTime || !event.endTime) {
-        return 0;
-      }
-      const date1 = dayjs(event.graphStartTime);
-      const date2 = dayjs(event.graphEndTime);
-      let diff = date2.diff(date1); // 毫秒
-      let width = (diff / 1000 / 60 / 60) * this.widthPerHour;
-      return width;
-    },
-    // 开始时间偏移
-    getStartTimeOffset(event) {
-      if (!event.startTime) {
-        return 0;
-      }
-      const date1 = dayjs().add(-1, "day").startOf("day");
-      const date2 = dayjs(event.graphStartTime);
-      let diff = date2.diff(date1); // 毫秒
-      let offset = (diff / 1000 / 60 / 60) * this.widthPerHour;
-      return offset;
-    },
-    firstDayBeforeStartTime(event) {
-      return dayjs(this.firstDay).isBefore(event.startTime);
-    },
-    endTimeBeforeLastDay(event) {
-      return dayjs(event.endTime).isBefore(this.lastDay);
-    },
-    getRemainTime(event) {
-      const date1 = dayjs();
-      const date2 = dayjs(event.endTime);
-      return date2.diff(date1);
     },
   },
 };
@@ -187,48 +116,5 @@ export default {
   height: 60px;
   display: flex;
   align-items: center;
-}
-.time-bar {
-  width: 100px;
-  height: 40px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.event-image {
-  height: 40px;
-  width: 86px;
-  background-size: auto 40px;
-  background-repeat: no-repeat;
-  position: absolute;
-}
-.event-name {
-  color: white;
-  z-index: 10;
-  margin-left: 10px;
-}
-.event-remain {
-  color: white;
-  z-index: 10;
-  margin-right: 10px;
-  display: flex;
-}
-.left-radius {
-  border-top-left-radius: 20px;
-  border-bottom-left-radius: 20px;
-}
-.right-radius {
-  border-top-right-radius: 20px;
-  border-bottom-right-radius: 20px;
-}
-.color1 {
-  background: linear-gradient(to right, #bacfe4, #9acfff);
-}
-.color2 {
-  background: linear-gradient(to right, #8085df, #959dfa);
-}
-.color3 {
-  background: linear-gradient(to right, #84d6cf, #88e0d7);
 }
 </style>
