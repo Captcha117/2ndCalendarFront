@@ -8,14 +8,12 @@
     @change="onChange"
     class="count-down"
   >
-    <view class="time__item" v-if="timeData.days">
-      &nbsp;{{ timeData.days }}&nbsp;天&nbsp;
-    </view>
-    <view class="time__item">
-      {{ timeData.hours > 10 ? timeData.hours : "0" + timeData.hours }}&nbsp;时
-    </view>
-    <!-- <text class="time__item">{{ timeData.minutes }}&nbsp;分</text>
-      <text class="time__item">{{ timeData.seconds }}&nbsp;秒</text> -->
+    <view class="time__item" v-if="timeData.days"> {{ timeData.days }}天 </view>
+    <view class="time__item"> {{ timeData.hours }}小时 </view>
+    <text class="time__item" v-if="!timeData.days"
+      >{{ timeData.minutes }}分</text
+    >
+    <!--  <text class="time__item">{{ timeData.seconds }}&nbsp;秒</text> -->
   </u-count-down>
 </template>
 

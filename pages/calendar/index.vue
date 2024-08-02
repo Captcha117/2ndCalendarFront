@@ -45,6 +45,13 @@ export default {
           gameId: "1",
           img: "https://upload-bbs.miyoushe.com/upload/2024/07/26/75276539/2250a5ca44dacacf56d7b9b59c5cbe3f_147733397602620236.jpg",
         },
+        {
+          name: "「选香入门」",
+          startTime: "2024/08/01 12:00",
+          endTime: "2024/08/07 23:59",
+          gameId: "1",
+          img: "https://upload-bbs.miyoushe.com/upload/2024/07/31/75276539/2465cd7ebc412d846be323281245b067_2068653672708340083.jpg?",
+        },
       ],
       days: ["日", "一", "二", "三", "四", "五", "六"],
     };

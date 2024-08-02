@@ -22,8 +22,13 @@
       }"
     ></view>
     <view class="event-name">{{ e.name }}</view>
-    <view class="event-remain">
-      <text>剩余</text>
+    <view class="event-remain" :style="{ 'background-color': mainColor }">
+      <u-icon
+        name="clock"
+        color="white"
+        size="12"
+        style="margin-right: 3px"
+      ></u-icon>
       <count-down :time="getRemainTime(e)"></count-down>
     </view>
   </view>
@@ -130,12 +135,21 @@ $bar-height: 40px;
   color: white;
   z-index: 10;
   margin-left: 10px;
+  text-shadow: 1px 1px 2px black;
 }
 .event-remain {
+  position: absolute;
+  right: 0;
   color: white;
   z-index: 10;
   margin-right: 10px;
   display: flex;
+  text-shadow: 1px 1px 2px black;
+  bottom: -10px;
+  background: black;
+  border-radius: 10px;
+  padding: 2px 5px;
+  font-size: 12px;
 }
 .left-radius {
   border-top-left-radius: $bar-height / 2;
