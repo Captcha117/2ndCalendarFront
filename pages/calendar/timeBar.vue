@@ -10,19 +10,22 @@
     :style="{
       width: getEventWidth(e) + 'px',
       left: getStartTimeOffset(e) + 'px',
-      'background-color': mainColor,
+      'background-color': e.mainColor,
     }"
   >
     <view
-      class="event-image"
+      class="event-image right-radius"
       :class="{ 'left-radius': firstDayBeforeStartTime(e) }"
       :style="{
-        'background-image': `linear-gradient(90deg,transparent,${mainColor}), url(${e.img})`,
+        'background-image': `linear-gradient(90deg,transparent,${e.mainColor}), url(${e.img})`,
         width: imgWidth + 'px',
       }"
     ></view>
-    <view class="event-name">{{ e.name }}</view>
-    <view class="event-remain" :style="{ 'background-color': mainColor }">
+    <view
+      v-if="getRemainTime(e) > 0"
+      class="event-remain"
+      :style="{ 'background-color': e.mainColor }"
+    >
       <u-icon
         name="clock"
         color="white"
@@ -31,13 +34,13 @@
       ></u-icon>
       <count-down :time="getRemainTime(e)"></count-down>
     </view>
+    <canvas :canvas-id="'img' + e.id" style="visibility: hidden"></canvas>
   </view>
 </template>
 
 <script>
 import dayjs from "@/utils/dayjs";
 import CountDown from "@/components/countDown";
-import { getImageColor } from "@/utils/mainColor";
 export default {
   components: { CountDown },
   props: ["e", "screenWidth"],
@@ -47,7 +50,6 @@ export default {
       firstDay: dayjs().add(-1, "day").startOf("day"),
       lastDay: dayjs().add(6, "day").startOf("day"),
       imgWidth: 0,
-      mainColor: "#ffffff",
     };
   },
   computed: {
@@ -57,22 +59,11 @@ export default {
   },
   mounted() {
     if (this.e.img) {
-      let img = new Image();
-      img.src = this.e.img;
-      img.crossOrigin = "anonymous";
-      img.addEventListener("load", () => {
-        try {
-          this.mainColor = getImageColor(img);
-          console.log(this.mainColor);
-        } catch (error) {
-          this.mainColor = "#ffffff";
-        }
-        try {
-          let { height, width } = img;
-          this.imgWidth = (this.barHeight / height) * width;
-        } catch (error) {
-          this.imgWidth = 0;
-        }
+      uni.getImageInfo({
+        src: this.e.img,
+        success: (res) => {
+          this.imgWidth = (this.barHeight / res.height) * res.width;
+        },
       });
     }
   },
@@ -129,13 +120,7 @@ $bar-height: 40px;
   width: 0;
   background-size: auto $bar-height;
   background-repeat: no-repeat;
-  position: absolute;
-}
-.event-name {
-  color: white;
-  z-index: 10;
-  margin-left: 10px;
-  text-shadow: 1px 1px 2px black;
+  // position: absolute;
 }
 .event-remain {
   position: absolute;
@@ -145,8 +130,8 @@ $bar-height: 40px;
   margin-right: 10px;
   display: flex;
   text-shadow: 1px 1px 2px black;
-  bottom: -10px;
-  background: black;
+  top: -10px;
+  background: white;
   border-radius: 10px;
   padding: 2px 5px;
   font-size: 12px;

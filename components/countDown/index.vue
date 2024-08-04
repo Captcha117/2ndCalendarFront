@@ -8,12 +8,7 @@
     @change="onChange"
     class="count-down"
   >
-    <view class="time__item" v-if="timeData.days"> {{ timeData.days }}天 </view>
-    <view class="time__item"> {{ timeData.hours }}小时 </view>
-    <text class="time__item" v-if="!timeData.days"
-      >{{ timeData.minutes }}分</text
-    >
-    <!--  <text class="time__item">{{ timeData.seconds }}&nbsp;秒</text> -->
+    <view class="time__item"> {{ text }}</view>
   </u-count-down>
 </template>
 
@@ -23,12 +18,17 @@ export default {
   props: ["time"],
   data() {
     return {
-      timeData: {},
+      text: "",
     };
   },
   methods: {
     onChange(e) {
-      this.timeData = e;
+      let timeData = e;
+      let text = "";
+      text += timeData.days ? timeData.days + " 天 " : "";
+      text += timeData.hours ? timeData.hours + " 小时 " : "";
+      text += !timeData.days ? timeData.minutes + "分" : "";
+      this.text = text;
     },
   },
 };

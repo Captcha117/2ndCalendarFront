@@ -19,8 +19,10 @@
     </view>
     <view class="events">
       <view v-for="(e, i) in eventList" class="event-row" :key="'event' + i">
-        <view style="width: 100%">
-          <time-bar :e="e" :screenWidth="screenWidth"></time-bar>
+        <time-bar :e="e" :screenWidth="screenWidth"></time-bar>
+        <view class="event-text">
+          <view class="event-name">{{ e.name }}</view>
+          <view class="event-reward">{{ e.reward }}</view>
         </view>
       </view>
     </view>
@@ -39,17 +41,23 @@ export default {
       screenWidth: 0,
       eventList: [
         {
+          id: 1,
           name: "画外旅照·浮露之章",
           startTime: "2024/07/29 10:00",
-          endTime: "2024/08/08 03:59",
+          endTime: "2024/08/04 03:59",
           gameId: "1",
+          mainColor: "#61a5d4",
+          reward: "420 原石",
           img: "https://upload-bbs.miyoushe.com/upload/2024/07/26/75276539/2250a5ca44dacacf56d7b9b59c5cbe3f_147733397602620236.jpg",
         },
         {
+          id: 2,
           name: "「选香入门」",
           startTime: "2024/08/01 12:00",
           endTime: "2024/08/07 23:59",
           gameId: "1",
+          mainColor: "rgb(178, 181, 109)",
+          url: "https://www.miyoushe.com/ys/article/55790552",
           img: "https://upload-bbs.miyoushe.com/upload/2024/07/31/75276539/2465cd7ebc412d846be323281245b067_2068653672708340083.jpg?",
         },
       ],
@@ -123,5 +131,18 @@ export default {
   height: 60px;
   display: flex;
   align-items: center;
+  width: 100%;
+}
+.event-text {
+  color: white;
+  z-index: 10;
+  margin-left: 10px;
+  text-shadow: 1px 1px 2px black;
+  position: absolute;
+}
+.event-name {
+}
+.event-reward {
+  font-size: 12px;
 }
 </style>
