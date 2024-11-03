@@ -52,11 +52,9 @@
         </view>
       </view>
     </view>
-    <!-- <uni-popup ref="popup" background-color="#fff">
-      <view class="popup-content" type="bottom"
-        ><text class="text">popup 内容</text></view
-      >
-    </uni-popup> -->
+    <uni-popup ref="popup" background-color="#fff" type="bottom">
+      <event-detail :event="currentEvent"></event-detail>
+    </uni-popup>
   </view>
 </template>
 
@@ -65,8 +63,9 @@ import dayjs from "@/utils/dayjs";
 import TimeBar from "./timeBar.vue";
 import CountDown from "@/components/countDown";
 import eventList from "./event.js";
+import eventDetail from "./event-detail.vue";
 export default {
-  components: { TimeBar, CountDown },
+  components: { TimeBar, CountDown, eventDetail },
   data() {
     return {
       firstDay: dayjs().add(-1, "day").startOf("day"),
@@ -74,6 +73,7 @@ export default {
       screenWidth: 0,
       eventList: eventList,
       days: ["日", "一", "二", "三", "四", "五", "六"],
+      currentEvent: {},
     };
   },
   onLoad() {
@@ -104,7 +104,8 @@ export default {
     },
     clickEvent(e) {
       console.log(e);
-      // this.$refs.popup.open();
+      this.currentEvent = e;
+      this.$refs.popup.open();
     },
   },
 };
