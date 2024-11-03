@@ -23,11 +23,15 @@ export default {
   },
   methods: {
     onChange(e) {
+      
       let timeData = e;
       let text = "";
-      text += timeData.days ? timeData.days + " 天 " : "";
-      text += timeData.hours ? timeData.hours + " 小时 " : "";
-      text += !timeData.days ? timeData.minutes + "分" : "";
+      if (timeData.days > 0) {
+        text += timeData.days ? timeData.days + " 天 " : "";
+      } else {
+        text += timeData.hours ? timeData.hours + " 小时 " : "";
+      }
+      // text += !timeData.days ? timeData.minutes + " 分" : "";
       this.text = text;
     },
   },

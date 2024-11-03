@@ -1,66 +1,78 @@
 <template>
   <view class="calendar-page">
     <view class="background">
-      <view
-        class="split-line"
-        v-for="i in 6"
-        :key="'line' + i"
-        :style="{
-          left: 14.285714285714 * i + '%',
-        }"
-      >
-      </view>
+      <view class="blank"></view>
+      <view class="date" v-for="i in 7" :key="'date' + i"> </view>
     </view>
     <view class="week">
+      <view class="blank"></view>
       <view class="date" v-for="i in 7" :key="'date' + i">
         <view>{{ addDays(i - 2) }}</view>
         <view>{{ getDay(i - 2) }}</view>
       </view>
     </view>
-    <view class="events">
-      <view v-for="(e, i) in eventList" class="event-row" :key="'event' + i">
-        <time-bar :e="e" :screenWidth="screenWidth"></time-bar>
-        <view class="event-text">
-          <view class="event-name">{{ e.name }}</view>
-          <view class="event-reward">{{ e.reward }}</view>
+    <view class="event">
+      <view class="img-list">
+        <view
+          v-for="(e, i) in eventList"
+          class="img-item"
+          :key="'event' + i"
+          :style="{
+            'background-image': ` url(${e.img}`,
+          }"
+        >
+        </view>
+      </view>
+      <view class="event-list">
+        <view
+          v-for="(e, i) in eventList"
+          class="event-row"
+          :key="'event' + i"
+          @click="clickEvent(e)"
+        >
+          <time-bar :e="e" :screenWidth="screenWidth"></time-bar>
+          <view class="event-text">
+            <view class="event-name">{{ e.name }}</view>
+            <view class="event-reward">
+              <view class="event-reward-item" v-for="r in e.reward">
+                <reward-icon :name="r.name"></reward-icon>
+                <text>{{ r.count }}</text>
+              </view>
+            </view>
+          </view>
+          <view class="remain-time" v-if="getRemainTime(e) > 0">
+            <u-icon
+              name="clock"
+              color="white"
+              size="12"
+              style="margin-right: 3px"
+            ></u-icon>
+            <count-down :time="getRemainTime(e)"></count-down>
+          </view>
         </view>
       </view>
     </view>
+    <!-- <uni-popup ref="popup" background-color="#fff">
+      <view class="popup-content" type="bottom"
+        ><text class="text">popup 内容</text></view
+      >
+    </uni-popup> -->
   </view>
 </template>
 
 <script>
 import dayjs from "@/utils/dayjs";
 import TimeBar from "./timeBar.vue";
+import CountDown from "@/components/countDown";
+import eventList from "./event.js";
 export default {
-  components: { TimeBar },
+  components: { TimeBar, CountDown },
   data() {
     return {
       firstDay: dayjs().add(-1, "day").startOf("day"),
       lastDay: dayjs().add(6, "day").startOf("day"),
       screenWidth: 0,
-      eventList: [
-        {
-          id: 1,
-          name: "画外旅照·浮露之章",
-          startTime: "2024/07/29 10:00",
-          endTime: "2024/08/04 03:59",
-          gameId: "1",
-          mainColor: "#61a5d4",
-          reward: "420 原石",
-          img: "https://upload-bbs.miyoushe.com/upload/2024/07/26/75276539/2250a5ca44dacacf56d7b9b59c5cbe3f_147733397602620236.jpg",
-        },
-        {
-          id: 2,
-          name: "「选香入门」",
-          startTime: "2024/08/01 12:00",
-          endTime: "2024/08/07 23:59",
-          gameId: "1",
-          mainColor: "rgb(178, 181, 109)",
-          url: "https://www.miyoushe.com/ys/article/55790552",
-          img: "https://upload-bbs.miyoushe.com/upload/2024/07/31/75276539/2465cd7ebc412d846be323281245b067_2068653672708340083.jpg?",
-        },
-      ],
+      eventList: eventList,
       days: ["日", "一", "二", "三", "四", "五", "六"],
     };
   },
@@ -85,6 +97,15 @@ export default {
     getDay(offset) {
       return this.days[dayjs().add(offset, "day").day()];
     },
+    getRemainTime(event) {
+      const date1 = dayjs();
+      const date2 = dayjs(event.endTime);
+      return date2.diff(date1);
+    },
+    clickEvent(e) {
+      console.log(e);
+      // this.$refs.popup.open();
+    },
   },
 };
 </script>
@@ -100,22 +121,29 @@ export default {
   width: 100%;
   top: 0;
   background-color: white;
+  display: flex;
 }
 .week {
   position: fixed;
   top: 0;
   width: 100%;
   z-index: 100;
+  display: flex;
+  height: 60px;
+}
+.blank {
+  width: 80px;
+  background: white;
 }
 .date {
-  width: 14.285714285714%;
-  float: left;
   box-sizing: border-box;
-  text-align: center;
   border: 0.5px solid #e5e5e5;
-  padding: 5px 0;
-  line-height: 20px;
   background-color: white;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 .split-line {
   height: 100%;
@@ -123,26 +151,56 @@ export default {
   background-color: #e5e5e5;
   position: absolute;
 }
-.events {
+.event {
+  display: flex;
   margin-top: 60px;
+}
+.img-list {
+  width: 80px;
+  flex-shrink: 0;
+  z-index: 1;
+}
+.img-item {
+  height: 60px;
+  border: 0.5px solid #e5e5e5;
+  border-left-width: 0px;
+  background-size: auto 60px;
+  background-repeat: no-repeat;
+  background-position: left;
+}
+.event-list {
   flex: 1;
 }
+
 .event-row {
+  position: relative;
+  text-shadow: 1px 1px 2px black;
+  color: white;
   height: 60px;
   display: flex;
   align-items: center;
   width: 100%;
+  justify-content: space-between;
 }
 .event-text {
-  color: white;
   z-index: 10;
   margin-left: 10px;
-  text-shadow: 1px 1px 2px black;
-  position: absolute;
+  // position: absolute;
 }
 .event-name {
 }
 .event-reward {
   font-size: 12px;
+}
+.event-reward-item {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 10px;
+}
+.remain-time {
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  z-index: 10;
 }
 </style>
