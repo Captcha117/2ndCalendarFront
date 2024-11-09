@@ -8,14 +8,14 @@
     @change="onChange"
     class="count-down"
   >
-    <view class="time__item"> {{ text }}</view>
+    <view class="time__item" :style="{ color }"> {{ text }}</view>
   </u-count-down>
 </template>
 
 <script>
 export default {
   name: "countDown",
-  props: ["time"],
+  props: ["time", "color"],
   data() {
     return {
       text: "",
@@ -23,7 +23,6 @@ export default {
   },
   methods: {
     onChange(e) {
-      
       let timeData = e;
       let text = "";
       if (timeData.days > 0) {
@@ -45,9 +44,5 @@ export default {
 }
 .time {
   align-items: center;
-
-  &__item {
-    color: #fff;
-  }
 }
 </style>

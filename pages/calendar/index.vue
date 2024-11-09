@@ -40,15 +40,7 @@
               </view>
             </view>
           </view>
-          <view class="remain-time" v-if="getRemainTime(e) > 0">
-            <u-icon
-              name="clock"
-              color="white"
-              size="12"
-              style="margin-right: 3px"
-            ></u-icon>
-            <count-down :time="getRemainTime(e)"></count-down>
-          </view>
+          <event-status class="event-status" :event="e"> </event-status>
         </view>
       </view>
     </view>
@@ -61,11 +53,11 @@
 <script>
 import dayjs from "@/utils/dayjs";
 import TimeBar from "./timeBar.vue";
-import CountDown from "@/components/countDown";
 import eventList from "./event.js";
-import eventDetail from "./event-detail.vue";
+import EventDetail from "./components/event-detail.vue";
+import EventStatus from "./components/event-status.vue";
 export default {
-  components: { TimeBar, CountDown, eventDetail },
+  components: { TimeBar, EventDetail, EventStatus },
   data() {
     return {
       firstDay: dayjs().add(-1, "day").startOf("day"),
@@ -128,7 +120,6 @@ export default {
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: 100;
   display: flex;
   height: 60px;
 }
@@ -198,10 +189,9 @@ export default {
   align-items: center;
   margin-right: 10px;
 }
-.remain-time {
+.event-status {
+  font-size: 14px;
   margin-right: 10px;
-  display: flex;
-  align-items: center;
   z-index: 10;
 }
 </style>
