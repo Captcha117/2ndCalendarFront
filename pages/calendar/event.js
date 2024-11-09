@@ -1,5 +1,4 @@
 export default [
-  {},
   {
     id: 1,
     name: "画外旅照·浮露之章",

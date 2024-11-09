@@ -94,7 +94,14 @@ export default {
   },
   computed: {
     showList() {
-      return this.eventList;
+      let list = this.eventList.sort((a, b) => {
+        if (a.done !== b.done) {
+          return Number(a.done) - Number(b.done);
+        } else {
+          return new Date(a.endTime) - new Date(b.endTime);
+        }
+      });
+      return list;
     },
   },
   methods: {
