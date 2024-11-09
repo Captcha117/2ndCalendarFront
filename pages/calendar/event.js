@@ -14,7 +14,7 @@ export default [
     id: 2,
     name: "「选香入门」",
     startTime: "2024/11/8 12:00",
-    endTime: "2024/11/12 23:59",
+    endTime: "2024/11/20 23:59",
     gameId: "1",
     mainColor: "rgb(178, 181, 109)",
     url: "https://www.miyoushe.com/ys/article/55790552",

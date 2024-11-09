@@ -2,16 +2,15 @@
   <view class="popup-content" :style="{ height: height * 0.6 + 'px' }">
     <view class="event-name">
       <view> {{ event.name }}</view>
-      <event-status
-        class="event-status"
-        :event="event"
-        color="black"
-      ></event-status>
     </view>
     <view class="event-time">
-      {{ event.startTime }} - {{ event.endTime }}
+      <view>{{ event.startTime }} - {{ event.endTime }}</view>
+      <event-remain :event="event"></event-remain>
     </view>
-    <view></view>
+    <view class="event-execution">
+      <event-reward :event="event" size="14"></event-reward>
+      <event-status :event="event" enabled></event-status>
+    </view>
     <view
       class="event-image"
       :style="{
@@ -23,10 +22,12 @@
 </template>
 
 <script>
+import EventRemain from "./event-remain.vue";
+import EventReward from "./event-reward.vue";
 import EventStatus from "./event-status.vue";
 export default {
   props: ["event"],
-  components: { EventStatus },
+  components: { EventRemain, EventStatus, EventReward },
   data() {
     return {
       height: 0,
@@ -58,10 +59,20 @@ export default {
   font-weight: bold;
 }
 .event-time {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   font-size: 14px;
   line-height: 22px;
+  margin: 10px 0;
   color: rgba(0, 0, 0, 0.85);
 }
+.event-execution {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .event-image {
   height: 160px;
   width: 100%;

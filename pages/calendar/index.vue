@@ -33,14 +33,14 @@
           <time-bar :e="e" :screenWidth="screenWidth"></time-bar>
           <view class="event-text">
             <view class="event-name">{{ e.name }}</view>
-            <view class="event-reward">
-              <view class="event-reward-item" v-for="r in e.reward">
-                <reward-icon :name="r.name"></reward-icon>
-                <text>{{ r.count }}</text>
-              </view>
-            </view>
+            <event-reward :event="e"></event-reward>
           </view>
-          <event-status class="event-status" :event="e"> </event-status>
+          <event-status
+            v-if="e.done"
+            class="event-status"
+            :event="e"
+          ></event-status>
+          <event-remain v-else class="event-remain" :event="e"> </event-remain>
         </view>
       </view>
     </view>
@@ -55,9 +55,11 @@ import dayjs from "@/utils/dayjs";
 import TimeBar from "./timeBar.vue";
 import eventList from "./event.js";
 import EventDetail from "./components/event-detail.vue";
+import EventRemain from "./components/event-remain.vue";
 import EventStatus from "./components/event-status.vue";
+import EventReward from "./components/event-reward.vue";
 export default {
-  components: { TimeBar, EventDetail, EventStatus },
+  components: { TimeBar, EventDetail, EventRemain, EventStatus, EventReward },
   data() {
     return {
       firstDay: dayjs().add(-1, "day").startOf("day"),
@@ -66,6 +68,8 @@ export default {
       eventList: eventList,
       days: ["日", "一", "二", "三", "四", "五", "六"],
       currentEvent: {},
+
+      doneList: [],
     };
   },
   onLoad() {
@@ -74,15 +78,30 @@ export default {
         this.screenWidth = res.screenWidth;
       },
     });
-    this.eventList.forEach((e) => {
-      e.graphStartTime = Math.max(
-        +new Date(this.firstDay),
-        +new Date(e.startTime)
+    this.getDoneList();
+    this.eventList.forEach((e, i) => {
+      this.$set(
+        e,
+        "graphStartTime",
+        Math.max(+new Date(this.firstDay), +new Date(e.startTime))
       );
-      e.graphEndTime = Math.min(+new Date(this.lastDay), +new Date(e.endTime));
+      this.$set(
+        e,
+        "graphEndTime",
+        Math.min(+new Date(this.lastDay), +new Date(e.endTime))
+      );
+      this.$set(e, "done", this.doneList.includes(e.id));
     });
   },
   methods: {
+    getDoneList() {
+      try {
+        const list = uni.getStorageSync("doneList");
+        this.doneList = list || [];
+      } catch (e) {
+        this.doneList = [];
+      }
+    },
     addDays(offset) {
       return dayjs().add(offset, "day").format("D");
     },
@@ -95,7 +114,6 @@ export default {
       return date2.diff(date1);
     },
     clickEvent(e) {
-      console.log(e);
       this.currentEvent = e;
       this.$refs.popup.open();
     },
@@ -166,32 +184,25 @@ export default {
 
 .event-row {
   position: relative;
-  text-shadow: 1px 1px 2px black;
   color: white;
   height: 60px;
   display: flex;
   align-items: center;
-  width: 100%;
   justify-content: space-between;
+  padding: 0 10px;
 }
 .event-text {
   z-index: 10;
-  margin-left: 10px;
+  text-shadow: 0px 0px 4px black;
   // position: absolute;
 }
 .event-name {
 }
-.event-reward {
-  font-size: 12px;
-}
-.event-reward-item {
-  display: inline-flex;
-  align-items: center;
-  margin-right: 10px;
+.event-remain {
+  font-size: 14px;
+  z-index: 10;
 }
 .event-status {
-  font-size: 14px;
-  margin-right: 10px;
   z-index: 10;
 }
 </style>

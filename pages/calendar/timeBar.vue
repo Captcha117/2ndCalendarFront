@@ -116,12 +116,12 @@ $bar-height: 40px;
   font-size: 12px;
 }
 .left-radius {
-  border-top-left-radius: $bar-height / 2;
-  border-bottom-left-radius: $bar-height / 2;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
 }
 .right-radius {
-  border-top-right-radius: $bar-height / 2;
-  border-bottom-right-radius: $bar-height / 2;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
 }
 .color1 {
   background: linear-gradient(to right, #bacfe4, #9acfff);

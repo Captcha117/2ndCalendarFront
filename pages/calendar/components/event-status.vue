@@ -1,47 +1,57 @@
 <template>
-  <view class="event-status" v-if="getRemainTime() > 0">
-    <u-icon
-      name="clock"
-      :color="color || 'white'"
-      size="12"
-      style="margin-right: 5px"
-    ></u-icon>
-    <count-down :time="getRemainTime()" :color="color"></count-down>
+  <view
+    class="event-status"
+    :class="event.done ? 'done' : 'undone'"
+    @click="changeStatus()"
+  >
+    <template v-if="event.done">
+      <uni-icons type="checkbox" size="15" color="#89bf14"></uni-icons>
+      已完成
+    </template>
+    <template v-else>
+      <uni-icons type="circle" size="15" color="#bcb5af"></uni-icons>
+      未完成
+    </template>
   </view>
 </template>
 
 <script>
-import dayjs from "@/utils/dayjs";
-import CountDown from "@/components/countDown";
 export default {
-  props: ["event", "color"],
-  components: { CountDown },
-  computed: {
-    getRemainTime() {
-      return () => {
-        const date1 = dayjs();
-        const date2 = dayjs(this.event.endTime);
-        return date2.diff(date1);
-      };
+  props: {
+    event: Object,
+    enabled: Boolean,
+  },
+  methods: {
+    changeStatus() {
+      if (this.enabled) {
+        this.event.done = !this.event.done;
+      }
     },
   },
-  methods: {},
 };
 </script>
 
 <style scoped lang="scss">
 .event-status {
+  .uni-icons {
+    margin-right: 5px;
+  }
+  height: 24px;
+  border-radius: 4px;
+  opacity: 1;
+  line-height: 24px;
+  padding: 0 7px;
   display: flex;
   align-items: center;
-  line-height: 14px;
   font-size: 12px;
-  font-weight: 200;
-  padding: 4px 7px;
-  border-radius: 3px;
-  background-color: #8f939c69;
-  border-width: 1px;
-  border-style: solid;
-  border-color: #8f939c;
-  font-weight: bold;
+  background: #ffffffe6;
+  &.done {
+    color: #89bf14;
+    border: 1px solid #89bf14;
+  }
+  &.undone {
+    color: #bcb5af;
+    border: 1px solid #bcb5af;
+  }
 }
 </style>
