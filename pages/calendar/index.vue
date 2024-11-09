@@ -193,6 +193,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   padding: 0 10px;
+  font-size: 14px;
 }
 .event-text {
   z-index: 10;
