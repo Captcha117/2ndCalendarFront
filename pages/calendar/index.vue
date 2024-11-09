@@ -14,9 +14,10 @@
     <view class="event">
       <view class="img-list">
         <view
-          v-for="(e, i) in eventList"
+          v-for="(e, i) in showList"
           class="img-item"
           :key="'event' + i"
+          @click="clickEvent(e)"
           :style="{
             'background-image': ` url(${e.img}`,
           }"
@@ -25,7 +26,7 @@
       </view>
       <view class="event-list">
         <view
-          v-for="(e, i) in eventList"
+          v-for="(e, i) in showList"
           class="event-row"
           :key="'event' + i"
           @click="clickEvent(e)"
@@ -68,8 +69,6 @@ export default {
       eventList: eventList,
       days: ["日", "一", "二", "三", "四", "五", "六"],
       currentEvent: {},
-
-      doneList: [],
     };
   },
   onLoad() {
@@ -78,7 +77,7 @@ export default {
         this.screenWidth = res.screenWidth;
       },
     });
-    this.getDoneList();
+    this.$store.dispatch("user/getDoneList");
     this.eventList.forEach((e, i) => {
       this.$set(
         e,
@@ -90,18 +89,15 @@ export default {
         "graphEndTime",
         Math.min(+new Date(this.lastDay), +new Date(e.endTime))
       );
-      this.$set(e, "done", this.doneList.includes(e.id));
+      this.$set(e, "done", this.$store.state.user.doneList.includes(e.id));
     });
   },
-  methods: {
-    getDoneList() {
-      try {
-        const list = uni.getStorageSync("doneList");
-        this.doneList = list || [];
-      } catch (e) {
-        this.doneList = [];
-      }
+  computed: {
+    showList() {
+      return this.eventList;
     },
+  },
+  methods: {
     addDays(offset) {
       return dayjs().add(offset, "day").format("D");
     },

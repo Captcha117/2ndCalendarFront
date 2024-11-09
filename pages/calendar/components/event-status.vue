@@ -24,6 +24,11 @@ export default {
   methods: {
     changeStatus() {
       if (this.enabled) {
+        if (this.event.done) {
+          this.$store.dispatch("user/removeDone", this.event.id);
+        } else {
+          this.$store.dispatch("user/addDone", this.event.id);
+        }
         this.event.done = !this.event.done;
       }
     },
