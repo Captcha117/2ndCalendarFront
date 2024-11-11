@@ -4,14 +4,18 @@
     :class="event.done ? 'done' : 'undone'"
     @click="changeStatus()"
   >
-    <template v-if="event.done">
-      <uni-icons type="checkbox" size="15" color="#89bf14"></uni-icons>
-      已完成
+    <template v-if="event.status === 0"> 未开始 </template>
+    <template v-else-if="event.status === 1">
+      <template v-if="event.done">
+        <uni-icons type="checkbox" size="15" color="#89bf14"></uni-icons>
+        已完成
+      </template>
+      <template v-else>
+        <uni-icons type="circle" size="15" color="#bcb5af"></uni-icons>
+        未完成
+      </template>
     </template>
-    <template v-else>
-      <uni-icons type="circle" size="15" color="#bcb5af"></uni-icons>
-      未完成
-    </template>
+    <template v-else> 已结束 </template>
   </view>
 </template>
 
@@ -23,7 +27,7 @@ export default {
   },
   methods: {
     changeStatus() {
-      if (this.enabled) {
+      if (this.enabled && this.event.status === 1) {
         if (this.event.done) {
           this.$store.dispatch("user/removeDone", this.event.id);
         } else {

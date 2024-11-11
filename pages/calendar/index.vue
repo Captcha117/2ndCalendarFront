@@ -37,7 +37,7 @@
             <event-reward :event="e"></event-reward>
           </view>
           <event-status
-            v-if="e.done"
+            v-if="e.done || e.status != 1"
             class="event-status"
             :event="e"
           ></event-status>
@@ -90,6 +90,7 @@ export default {
         Math.min(+new Date(this.lastDay), +new Date(e.endTime))
       );
       this.$set(e, "done", this.$store.state.user.doneList.includes(e.id));
+      this.getEventStatus(e);
     });
   },
   computed: {
@@ -111,14 +112,26 @@ export default {
     getDay(offset) {
       return this.days[dayjs().add(offset, "day").day()];
     },
-    getRemainTime(event) {
-      const date1 = dayjs();
-      const date2 = dayjs(event.endTime);
-      return date2.diff(date1);
-    },
     clickEvent(e) {
       this.currentEvent = e;
       this.$refs.popup.open();
+    },
+    getEventStatus(e) {
+      const date1 = dayjs(e.startTime);
+      const date2 = dayjs();
+      let eventStartLeft = date2.diff(date1);
+      if (eventStartLeft < 0) {
+        this.$set(e, "status", 0); // 未开始
+        return;
+      }
+
+      const date3 = dayjs(e.endTime);
+      let eventEndLeft = date3.diff(date2);
+      if (eventEndLeft >= 0) {
+        this.$set(e, "status", 1); // 进行中
+      } else {
+        this.$set(e, "status", 2); // 已结束
+      }
     },
   },
 };

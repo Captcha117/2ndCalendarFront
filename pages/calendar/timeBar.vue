@@ -13,21 +13,6 @@
       'background-color': e.mainColor,
     }"
   >
-    <!-- linear-gradient(90deg,${e.mainColor},${e.mainColor})) -->
-    <!-- <view
-      v-if="getRemainTime(e) > 0"
-      class="event-remain"
-      :style="{ 'background-color': e.mainColor }"
-    >
-      <u-icon
-        name="clock"
-        color="white"
-        size="12"
-        style="margin-right: 3px"
-      ></u-icon>
-      <count-down :time="getRemainTime(e)"></count-down>
-    </view> -->
-    <!-- <canvas :canvas-id="'img' + e.id" style="visibility: hidden"></canvas> -->
   </view>
 </template>
 
@@ -74,11 +59,6 @@ export default {
     },
     endTimeBeforeLastDay(event) {
       return dayjs(event.endTime).isBefore(this.lastDay);
-    },
-    getRemainTime(event) {
-      const date1 = dayjs();
-      const date2 = dayjs(event.endTime);
-      return date2.diff(date1);
     },
   },
 };
