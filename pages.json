@@ -4,7 +4,13 @@
     {
       "path": "pages/calendar/index",
       "style": {
-        "navigationBarTitleText": "活动日历"
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/calendar/setting",
+      "style": {
+        "navigationStyle": "custom"
       }
     },
     {

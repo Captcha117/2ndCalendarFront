@@ -1,5 +1,16 @@
 <template>
   <view class="calendar-page">
+    <uni-nav-bar
+      :fixed="true"
+      shadow
+      :border="false"
+      background-color="#F8F8F8"
+      color="black"
+      status-bar
+      right-icon="settings"
+      title="活动日历"
+      @clickRight="setting"
+    />
     <view class="background">
       <view class="blank"></view>
       <view class="date" v-for="i in 7" :key="'date' + i"> </view>
@@ -133,6 +144,11 @@ export default {
         this.$set(e, "status", 2); // 已结束
       }
     },
+    setting() {
+      uni.navigateTo({
+        url: "setting",
+      });
+    },
   },
 };
 </script>
@@ -152,7 +168,7 @@ export default {
 }
 .week {
   position: fixed;
-  top: 0;
+  top: 44px + var(--status-bar-height);
   width: 100%;
   display: flex;
   height: 60px;

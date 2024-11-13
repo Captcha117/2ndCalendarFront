@@ -14,4 +14,7 @@ export default {
 
 <style>
 /*每个页面公共css */
+::v-deep .uni-nav-bar-text {
+  font-weight: bold;
+}
 </style>
