@@ -77,7 +77,7 @@ export default {
       ],
       statusOptions: [
         { text: "未开始", value: 0 },
-        { text: "已开始", value: 1 },
+        { text: "进行中", value: 1 },
         { text: "已结束", value: 2 },
       ],
       doneOptions: [

@@ -65,7 +65,7 @@
 <script>
 import dayjs from "@/utils/dayjs";
 import TimeBar from "./timeBar.vue";
-import eventList from "./event.js";
+import events from "./event.js";
 import EventDetail from "./components/event-detail.vue";
 import EventRemain from "./components/event-remain.vue";
 import EventStatus from "./components/event-status.vue";
@@ -78,7 +78,7 @@ export default {
       firstDay: dayjs().add(-1, "day").startOf("day"),
       lastDay: dayjs().add(6, "day").startOf("day"),
       screenWidth: 0,
-      eventList: eventList,
+      eventList: [],
       days: ["日", "一", "二", "三", "四", "五", "六"],
       currentEvent: {},
     };
@@ -89,38 +89,66 @@ export default {
         this.screenWidth = res.screenWidth;
       },
     });
-    this.$store.dispatch("user/getDoneList");
-    this.$store.dispatch("user/getSettings");
-
-    this.eventList.forEach((e, i) => {
-      this.$set(
-        e,
-        "graphStartTime",
-        Math.max(+new Date(this.firstDay), +new Date(e.startTime))
-      );
-      this.$set(
-        e,
-        "graphEndTime",
-        Math.min(+new Date(this.lastDay), +new Date(e.endTime))
-      );
-      this.$set(e, "done", this.doneList.includes(e.id));
-      this.getEventStatus(e);
-    });
+    this.refresh();
   },
   computed: {
     ...mapGetters(["doneList", "settings"]),
     showList() {
-      let list = this.eventList.sort((a, b) => {
-        if (a.done !== b.done) {
-          return Number(a.done) - Number(b.done);
-        } else {
-          return new Date(a.endTime) - new Date(b.endTime);
-        }
-      });
+      let { games, prop, order, status, done } = this.settings;
+      console.log(this.settings);
+      let list = this.eventList.filter(
+        (x) =>
+          games.includes(x.gameId) &&
+          status.includes(x.status) &&
+          done.includes(x.done)
+      );
+      if (prop == "status") {
+        list.sort((a, b) => {
+          if (a.done !== b.done) {
+            return Number(b.done) - Number(a.done);
+          } else {
+            return new Date(a.endTime) - new Date(b.endTime);
+          }
+        });
+      } else {
+        list.sort((a, b) => {
+          return new Date(a[prop]) - new Date(b[prop]);
+        });
+      }
+      if (order === "desc") {
+        list.reverse();
+      }
       return list;
     },
   },
+  onShow() {
+    this.$store.dispatch("user/getDoneList");
+    this.$store.dispatch("user/getSettings");
+    this.handleData();
+  },
   methods: {
+    // 刷新
+    refresh() {
+      this.eventList = events;
+      this.handleData();
+    },
+    // 预处理数据
+    handleData() {
+      this.eventList.forEach((e, i) => {
+        this.$set(
+          e,
+          "graphStartTime",
+          Math.max(+new Date(this.firstDay), +new Date(e.startTime))
+        );
+        this.$set(
+          e,
+          "graphEndTime",
+          Math.min(+new Date(this.lastDay), +new Date(e.endTime))
+        );
+        this.$set(e, "done", this.doneList.includes(e.id));
+        this.getEventStatus(e);
+      });
+    },
     addDays(offset) {
       return dayjs().add(offset, "day").format("D");
     },
@@ -234,7 +262,6 @@ export default {
 .event-name {
 }
 .event-remain {
-  font-size: 14px;
   z-index: 10;
 }
 .event-status {

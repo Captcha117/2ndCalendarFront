@@ -6,11 +6,11 @@
         'left-radius': firstDayBeforeStartTime(e),
         'right-radius': endTimeBeforeLastDay(e),
       },
+      'color' + e.gameId,
     ]"
     :style="{
       width: getEventWidth(e) + 'px',
       left: getStartTimeOffset(e) + 'px',
-      'background-color': e.mainColor,
     }"
   >
   </view>
@@ -104,7 +104,7 @@ $bar-height: 40px;
   border-bottom-right-radius: 4px;
 }
 .color1 {
-  background: linear-gradient(to right, #bacfe4, #9acfff);
+  background: linear-gradient(to right, #5597d8, #9acfff);
 }
 .color2 {
   background: linear-gradient(to right, #8085df, #959dfa);

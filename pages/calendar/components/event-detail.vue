@@ -11,13 +11,7 @@
       <event-reward :event="event" size="14"></event-reward>
       <event-status :event="event" enabled></event-status>
     </view>
-    <view
-      class="event-image"
-      :style="{
-        'background-image': ` url(${event.img}`,
-      }"
-    >
-    </view>
+    <image class="event-image" :src="event.img" mode="widthFix"></image>
   </view>
 </template>
 
@@ -74,10 +68,7 @@ export default {
 }
 
 .event-image {
-  height: 160px;
   width: 100%;
-  background-position: center;
-  background-size: cover;
   margin: 10px 0;
 }
 </style>
