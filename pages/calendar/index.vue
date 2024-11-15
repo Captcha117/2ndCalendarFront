@@ -9,7 +9,7 @@
       status-bar
       right-icon="settings"
       title="活动日历"
-      @clickRight="setting"
+      @clickRight="toSettings"
     />
     <view class="background">
       <view class="blank"></view>
@@ -70,6 +70,7 @@ import EventDetail from "./components/event-detail.vue";
 import EventRemain from "./components/event-remain.vue";
 import EventStatus from "./components/event-status.vue";
 import EventReward from "./components/event-reward.vue";
+import { mapGetters } from "vuex";
 export default {
   components: { TimeBar, EventDetail, EventRemain, EventStatus, EventReward },
   data() {
@@ -89,6 +90,8 @@ export default {
       },
     });
     this.$store.dispatch("user/getDoneList");
+    this.$store.dispatch("user/getSettings");
+
     this.eventList.forEach((e, i) => {
       this.$set(
         e,
@@ -100,11 +103,12 @@ export default {
         "graphEndTime",
         Math.min(+new Date(this.lastDay), +new Date(e.endTime))
       );
-      this.$set(e, "done", this.$store.state.user.doneList.includes(e.id));
+      this.$set(e, "done", this.doneList.includes(e.id));
       this.getEventStatus(e);
     });
   },
   computed: {
+    ...mapGetters(["doneList", "settings"]),
     showList() {
       let list = this.eventList.sort((a, b) => {
         if (a.done !== b.done) {
@@ -144,10 +148,8 @@ export default {
         this.$set(e, "status", 2); // 已结束
       }
     },
-    setting() {
-      uni.navigateTo({
-        url: "setting",
-      });
+    toSettings() {
+      uni.navigateTo({ url: "settings" });
     },
   },
 };

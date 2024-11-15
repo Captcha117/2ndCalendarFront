@@ -1,7 +1,16 @@
 const getDefaultState = () => {
   return {
     doneList: [],
+    settings: {},
   };
+};
+
+const defaultSettings = {
+  games: [1, 2, 3],
+  prop: "status",
+  order: "asc",
+  status: [0, 1],
+  done: [false, true],
 };
 
 const state = getDefaultState();
@@ -9,6 +18,9 @@ const state = getDefaultState();
 const mutations = {
   SET_DONE_LIST: (state, doneList) => {
     state.doneList = doneList;
+  },
+  SET_SETTINGS: (state, settings) => {
+    state.settings = settings;
   },
 };
 
@@ -18,7 +30,7 @@ const actions = {
       return;
     } else {
       let list = [...state.doneList, id];
-      dispatch("setDontList", list);
+      dispatch("setDoneList", list);
     }
   },
   removeDone({ state, dispatch }, id) {
@@ -26,10 +38,10 @@ const actions = {
     let index = list.indexOf(id);
     if (index >= 0) {
       list.splice(index, 1);
-      dispatch("setDontList", list);
+      dispatch("setDoneList", list);
     }
   },
-  setDontList({ dispatch }, doneList) {
+  setDoneList({ dispatch }, doneList) {
     try {
       uni.setStorageSync("doneList", doneList || []);
       dispatch("getDoneList");
@@ -43,6 +55,22 @@ const actions = {
       list = [];
     }
     commit("SET_DONE_LIST", list);
+  },
+
+  setSettings({ dispatch }, settings) {
+    try {
+      uni.setStorageSync("settings", settings || defaultSettings);
+      dispatch("getSettings");
+    } catch (e) {}
+  },
+  getSettings({ commit }) {
+    let settings = {};
+    try {
+      settings = uni.getStorageSync("settings") || defaultSettings;
+    } catch (e) {
+      settings = defaultSettings;
+    }
+    commit("SET_SETTINGS", settings);
   },
 };
 

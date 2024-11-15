@@ -8,7 +8,7 @@
       }
     },
     {
-      "path": "pages/calendar/setting",
+      "path": "pages/calendar/settings",
       "style": {
         "navigationStyle": "custom"
       }

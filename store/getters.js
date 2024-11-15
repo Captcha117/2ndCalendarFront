@@ -1,4 +1,5 @@
 const getters = {
-  globalData: (state) => state.user.globalData,
+  doneList: (state) => state.user.doneList,
+  settings: (state) => state.user.settings,
 };
 export default getters;

@@ -9,7 +9,9 @@
       status-bar
       title="活动日历设置"
       left-icon="left"
+      right-text="确定"
       @clickLeft="back"
+      @clickRight="confirm"
     />
     <view class="calendar-setting">
       <uni-forms ref="baseForm" :modelValue="form">
@@ -54,23 +56,17 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      form: {
-        games: [1, 2, 3],
-        prop: "status",
-        order: "asc",
-        status: [1, 2, 3],
-        done: [false, true],
-      },
+      form: {},
       gameOptions: [
         { text: "Genshin", value: 1 },
         { text: "Starrail", value: 2 },
         { text: "ZZZ", value: 3 },
       ],
       propOptions: [
-        { text: "默认", value: "default" },
         { text: "按状态", value: "status" },
         { text: "按开始时间", value: "startTime" },
         { text: "按结束时间", value: "endTime" },
@@ -80,9 +76,9 @@ export default {
         { text: "降序", value: "desc" },
       ],
       statusOptions: [
-        { text: "未开始", value: 1 },
-        { text: "已开始", value: 2 },
-        { text: "已结束", value: 3 },
+        { text: "未开始", value: 0 },
+        { text: "已开始", value: 1 },
+        { text: "已结束", value: 2 },
       ],
       doneOptions: [
         { text: "未完成", value: false },
@@ -97,11 +93,19 @@ export default {
       ],
     };
   },
+  computed: {
+    ...mapGetters(["settings"]),
+  },
+  mounted() {
+    this.form = { ...this.settings };
+  },
   methods: {
     back() {
-      uni.navigateBack({
-        delta: 1,
-      });
+      uni.navigateBack({ delta: 1 });
+    },
+    confirm() {
+      this.$store.dispatch("user/setSettings", this.form);
+      this.back();
     },
   },
 };
