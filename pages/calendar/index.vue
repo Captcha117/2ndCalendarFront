@@ -95,7 +95,6 @@ export default {
     ...mapGetters(["doneList", "settings"]),
     showList() {
       let { games, prop, order, status, done } = this.settings;
-      console.log(this.settings);
       let list = this.eventList.filter(
         (x) =>
           games.includes(x.gameId) &&
@@ -105,7 +104,15 @@ export default {
       if (prop == "status") {
         list.sort((a, b) => {
           if (a.done !== b.done) {
-            return Number(b.done) - Number(a.done);
+            return Number(a.done) - Number(b.done);
+          } else {
+            return new Date(a.endTime) - new Date(b.endTime);
+          }
+        });
+      } else if (prop == "game") {
+        list.sort((a, b) => {
+          if (a.gameId !== b.gameId) {
+            return Number(a.gameId) - Number(b.gameId);
           } else {
             return new Date(a.endTime) - new Date(b.endTime);
           }
@@ -201,15 +208,16 @@ export default {
   top: 44px + var(--status-bar-height);
   width: 100%;
   display: flex;
-  height: 60px;
+  height: 120rpx;
+  z-index: 11;
 }
 .blank {
-  width: 80px;
+  width: 160rpx;
   background: white;
 }
 .date {
   box-sizing: border-box;
-  border: 0.5px solid #e5e5e5;
+  border: 1rpx solid #e5e5e5;
   background-color: white;
   flex: 1;
   display: flex;
@@ -219,24 +227,24 @@ export default {
 }
 .split-line {
   height: 100%;
-  width: 1px;
+  width: 2rpx;
   background-color: #e5e5e5;
   position: absolute;
 }
 .event {
   display: flex;
-  margin-top: 60px;
+  margin-top: 120rpx;
 }
 .img-list {
-  width: 80px;
+  width: 160rpx;
   flex-shrink: 0;
   z-index: 1;
 }
 .img-item {
-  height: 60px;
-  border: 0.5px solid #e5e5e5;
-  border-left-width: 0px;
-  background-size: auto 60px;
+  height: 120rpx;
+  border: 1rpx solid #e5e5e5;
+  border-left-width: 0;
+  background-size: auto 120rpx;
   background-repeat: no-repeat;
   background-position: left;
 }
@@ -247,16 +255,16 @@ export default {
 .event-row {
   position: relative;
   color: white;
-  height: 60px;
+  height: 124rpx;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 10px;
-  font-size: 14px;
+  padding: 0 20rpx;
+  font-size: 28rpx;
 }
 .event-text {
   z-index: 10;
-  text-shadow: 0px 0px 4px black;
+  text-shadow: 0 0 8rpx black;
   // position: absolute;
 }
 .event-name {

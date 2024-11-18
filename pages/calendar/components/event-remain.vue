@@ -4,7 +4,7 @@
       name="clock"
       :color="color || statusColor || 'white'"
       size="12"
-      style="margin-right: 5px"
+      style="margin-right: 10rpx"
     ></u-icon>
     <count-down
       :time="getRemainTime()"
@@ -52,21 +52,21 @@ export default {
 .event-remain {
   display: flex;
   align-items: center;
-  height: 24px;
-  line-height: 24px;
-  font-size: 12px;
-  padding: 0 7px;
-  border-radius: 4px;
+  height: 48rpx;
+  line-height: 48rpx;
+  font-size: 24rpx;
+  padding: 0 14rpx;
+  border-radius: 8rpx;
   background: #ffffffe6;
   color: #bcb5af;
-  border: 1px solid #bcb5af;
+  border: 2rpx solid #bcb5af;
   &.danger {
     color: #ff6155;
-    border: 1px solid #ff6155;
+    border: 2rpx solid #ff6155;
   }
   &.warning {
     color: #ffb806;
-    border: 1px solid #ffb806;
+    border: 2rpx solid #ffb806;
   }
 }
 </style>

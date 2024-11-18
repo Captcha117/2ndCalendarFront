@@ -4,7 +4,7 @@
       <reward-icon
         :name="r.name"
         :size="size"
-        style="margin-right: 1px"
+        style="margin-right: 2px"
       ></reward-icon>
       <text>{{ r.count }}</text>
     </view>
@@ -20,11 +20,11 @@ export default {
 
 <style scoped lang="scss">
 .event-reward {
-  font-size: 12px;
+  font-size: 24px;
 }
 .event-reward-item {
   display: inline-flex;
   align-items: center;
-  margin-right: 10px;
+  margin-right: 20px;
 }
 </style>

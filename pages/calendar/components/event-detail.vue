@@ -41,10 +41,10 @@ export default {
 .popup-content {
   display: flex;
   flex-direction: column;
-  padding: 15px;
+  padding: 30rpx;
   // height: 400px;
   background-color: #fff;
-  border-radius: 20px 20px 0 0;
+  border-radius: 40rpx 40rpx 0 0;
 }
 .event-name {
   display: flex;
@@ -56,9 +56,9 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 14px;
-  line-height: 22px;
-  margin: 10px 0;
+  font-size: 28rpx;
+  line-height: 44rpx;
+  margin: 20rpx 0;
   color: rgba(0, 0, 0, 0.85);
 }
 .event-execution {
@@ -69,6 +69,6 @@ export default {
 
 .event-image {
   width: 100%;
-  margin: 10px 0;
+  margin: 20rpx 0;
 }
 </style>

@@ -43,24 +43,24 @@ export default {
 <style scoped lang="scss">
 .event-status {
   .uni-icons {
-    margin-right: 5px;
+    margin-right: 10rpx;
   }
-  height: 24px;
-  border-radius: 4px;
+  height: 48rpx;
+  border-radius: 8rpx;
   opacity: 1;
-  line-height: 24px;
-  padding: 0 7px;
+  line-height: 48rpx;
+  padding: 0 14rpx;
   display: flex;
   align-items: center;
-  font-size: 12px;
+  font-size: 24rpx;
   background: #ffffffe6;
   &.done {
     color: #89bf14;
-    border: 1px solid #89bf14;
+    border: 2rpx solid #89bf14;
   }
   &.undone {
     color: #bcb5af;
-    border: 1px solid #bcb5af;
+    border: 2rpx solid #bcb5af;
   }
 }
 </style>

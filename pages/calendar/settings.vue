@@ -62,12 +62,13 @@ export default {
     return {
       form: {},
       gameOptions: [
-        { text: "Genshin", value: 1 },
-        { text: "Starrail", value: 2 },
-        { text: "ZZZ", value: 3 },
+        { text: "原神", value: 1 },
+        { text: "崩坏：星穹铁道", value: 2 },
+        { text: "绝区零", value: 3 },
       ],
       propOptions: [
         { text: "按状态", value: "status" },
+        { text: "按游戏", value: "game" },
         { text: "按开始时间", value: "startTime" },
         { text: "按结束时间", value: "endTime" },
       ],
@@ -113,7 +114,7 @@ export default {
 
 <style scoped lang="scss">
 .calendar-setting {
-  padding: 20px;
+  padding: 40rpx;
 }
 ::v-deep .uni-forms-item__content {
   display: flex;

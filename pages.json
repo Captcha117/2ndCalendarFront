@@ -36,14 +36,14 @@
     "borderStyle": "white",
     "backgroundColor": "#ffffff",
     "list": [
-      {
-        "pagePath": "pages/calendar/index",
-        "text": "活动日历"
-      },
-      {
-        "pagePath": "pages/timeline/index",
-        "text": "时间轴"
-      }
+      // {
+      //   "pagePath": "pages/calendar/index",
+      //   "text": "活动日历"
+      // },
+      // {
+      //   "pagePath": "pages/timeline/index",
+      //   "text": "时间轴"
+      // }
     ]
   }
 }

@@ -65,9 +65,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
-$bar-height: 40px;
+$bar-height: 80rpx;
 .time-bar {
-  width: 100px;
+  width: 200rpx;
   height: $bar-height;
   position: absolute;
   // display: flex;
@@ -86,22 +86,22 @@ $bar-height: 40px;
   right: 0;
   color: white;
   z-index: 10;
-  margin-right: 10px;
+  margin-right: 20rpx;
   display: flex;
-  text-shadow: 1px 1px 2px black;
-  top: -10px;
+  text-shadow: 2rpx 2rpx 4rpx black;
+  top: -20rpx;
   background: white;
-  border-radius: 10px;
-  padding: 2px 5px;
-  font-size: 12px;
+  border-radius: 20rpx;
+  padding: 4rpx 10rpx;
+  font-size: 14rpx;
 }
 .left-radius {
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
+  border-top-left-radius: 8rpx;
+  border-bottom-left-radius: 8rpx;
 }
 .right-radius {
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
+  border-top-right-radius: 8rpx;
+  border-bottom-right-radius: 8rpx;
 }
 .color1 {
   background: linear-gradient(to right, #5597d8, #9acfff);
