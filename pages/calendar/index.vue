@@ -56,7 +56,13 @@
         </view>
       </view>
     </view>
-    <uni-popup ref="popup" background-color="#fff" type="bottom">
+    <uni-popup
+      ref="popup"
+      background-color="#fff"
+      type="bottom"
+      :is-mask-click="false"
+      @maskClick="maskClick"
+    >
       <event-detail :event="currentEvent"></event-detail>
     </uni-popup>
   </view>
@@ -103,13 +109,22 @@ export default {
       );
       if (prop == "status") {
         list.sort((a, b) => {
-          if (a.done !== b.done) {
-            return Number(a.done) - Number(b.done);
-          } else {
-            return new Date(a.endTime) - new Date(b.endTime);
+          // 已结束排最后
+          if (a.status == 2) {
+            return 1;
           }
+          if (b.status == 2) {
+            return -1;
+          }
+          // 未结束中，已完成排最后
+          if (a.done !== b.done) {
+            return a.done - b.done;
+          }
+          // 否则按照结束时间排序
+          return new Date(a.endTime) - new Date(b.endTime);
         });
       } else if (prop == "game") {
+        // 按游戏排序
         list.sort((a, b) => {
           if (a.gameId !== b.gameId) {
             return Number(a.gameId) - Number(b.gameId);
@@ -165,6 +180,9 @@ export default {
     clickEvent(e) {
       this.currentEvent = e;
       this.$refs.popup.open();
+    },
+    maskClick() {
+      this.$refs.popup.close();
     },
     getEventStatus(e) {
       const date1 = dayjs(e.startTime);
