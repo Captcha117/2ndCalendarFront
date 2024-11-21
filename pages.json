@@ -1,0 +1,49 @@
+{
+  "pages": [
+    //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+    {
+      "path": "pages/calendar/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/calendar/settings",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/timeline/index",
+      "style": {
+        "navigationBarTitleText": "时间轴"
+      }
+    },
+    {
+      "path": "pages/webview/index"
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "HoyoCalendar",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  },
+  "uniIdRouter": {},
+  "tabBar": {
+    "color": "#595959",
+    "selectedColor": "#5ec468",
+    "borderStyle": "white",
+    "backgroundColor": "#ffffff",
+    "list": [
+      // {
+      //   "pagePath": "pages/calendar/index",
+      //   "text": "活动日历"
+      // },
+      // {
+      //   "pagePath": "pages/timeline/index",
+      //   "text": "时间轴"
+      // }
+    ]
+  }
+}
