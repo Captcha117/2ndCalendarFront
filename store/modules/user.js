@@ -6,10 +6,10 @@ const getDefaultState = () => {
 };
 
 const defaultSettings = {
-  games: [1, 2, 3],
+  games: [],
   prop: "status",
   order: "asc",
-  status: [0, 1],
+  status: [0, 1, 2],
   done: [false, true],
 };
 

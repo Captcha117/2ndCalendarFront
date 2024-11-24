@@ -30,7 +30,7 @@
           :key="'event' + i"
           @click="clickEvent(e)"
           :style="{
-            'background-image': ` url(${e.img}`,
+            'background-image': ` url(${e.imgUrl}`,
           }"
         >
         </view>
@@ -77,6 +77,7 @@ import EventRemain from "./components/event-remain.vue";
 import EventStatus from "./components/event-status.vue";
 import EventReward from "./components/event-reward.vue";
 import { mapGetters } from "vuex";
+import { getEventList, getGameList } from "./api";
 export default {
   components: { TimeBar, EventDetail, EventRemain, EventStatus, EventReward },
   data() {
@@ -100,12 +101,9 @@ export default {
   computed: {
     ...mapGetters(["doneList", "settings"]),
     showList() {
-      let { games, prop, order, status, done } = this.settings;
+      let { prop, order, status, done } = this.settings;
       let list = this.eventList.filter(
-        (x) =>
-          games.includes(x.gameId) &&
-          status.includes(x.status) &&
-          done.includes(x.done)
+        (x) => status.includes(x.status) && done.includes(x.done)
       );
       if (prop == "status") {
         list.sort((a, b) => {
@@ -144,15 +142,26 @@ export default {
     },
   },
   onShow() {
-    this.$store.dispatch("user/getDoneList");
-    this.$store.dispatch("user/getSettings");
-    this.handleData();
+    this.refresh();
+  },
+  mounted() {
+    this.$store.dispatch("sys/getGameList").then((_) => {
+      this.refresh();
+    });
   },
   methods: {
     // 刷新
     refresh() {
-      this.eventList = events;
-      this.handleData();
+      this.$store.dispatch("user/getDoneList");
+      this.$store.dispatch("user/getSettings");
+      this.getEventList();
+    },
+    // 获取事件列表
+    getEventList() {
+      getEventList(this.settings.games).then((_) => {
+        this.eventList = _.data || [];
+        this.handleData();
+      });
     },
     // 预处理数据
     handleData() {

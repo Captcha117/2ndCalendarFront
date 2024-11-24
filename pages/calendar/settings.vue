@@ -61,11 +61,6 @@ export default {
   data() {
     return {
       form: {},
-      gameOptions: [
-        { text: "原神", value: 1 },
-        { text: "崩坏：星穹铁道", value: 2 },
-        { text: "绝区零", value: 3 },
-      ],
       propOptions: [
         { text: "按状态", value: "status" },
         { text: "按游戏", value: "game" },
@@ -95,16 +90,31 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["settings"]),
+    ...mapGetters(["settings", "gameList"]),
+    gameOptions() {
+      return this.gameList.map((x) => ({ text: x.name, value: x.id }));
+    },
   },
   mounted() {
     this.form = { ...this.settings };
+    if (this.form.games.length == 0) {
+      this.form.games = this.gameList.map((x) => x.id);
+    }
   },
   methods: {
     back() {
       uni.navigateBack({ delta: 1 });
     },
     confirm() {
+      if (this.form.games.length == 0) {
+        uni.showToast({
+          mask: true,
+          icon: "none",
+          title: "请选择游戏",
+          duration: 2000,
+        });
+        return;
+      }
       this.$store.dispatch("user/setSettings", this.form);
       this.back();
     },

@@ -11,7 +11,7 @@
       <event-reward :event="event" size="14"></event-reward>
       <event-status :event="event" enabled></event-status>
     </view>
-    <image class="event-image" :src="event.img" mode="widthFix"></image>
+    <image class="event-image" :src="event.imgUrl" mode="widthFix"></image>
   </view>
 </template>
 
