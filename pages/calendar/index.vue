@@ -42,7 +42,11 @@
           :key="'event' + i"
           @click="clickEvent(e)"
         >
-          <time-bar :e="e" :screenWidth="screenWidth"></time-bar>
+          <time-bar
+            :e="e"
+            :screenWidth="screenWidth"
+            :colorMap="colorMap"
+          ></time-bar>
           <view class="event-text">
             <view class="event-name">{{ e.name }}</view>
             <event-reward :event="e"></event-reward>
@@ -99,7 +103,7 @@ export default {
     this.refresh();
   },
   computed: {
-    ...mapGetters(["doneList", "settings"]),
+    ...mapGetters(["doneList", "settings", "gameList"]),
     showList() {
       let { prop, order, status, done } = this.settings;
       let list = this.eventList.filter(
@@ -139,6 +143,13 @@ export default {
         list.reverse();
       }
       return list;
+    },
+    colorMap() {
+      let r = {};
+      this.gameList.forEach((g) => {
+        r[g.id] = g.color;
+      });
+      return r;
     },
   },
   onShow() {

@@ -6,11 +6,11 @@
         'left-radius': firstDayBeforeStartTime(e),
         'right-radius': endTimeBeforeLastDay(e),
       },
-      'color' + e.gameId,
     ]"
     :style="{
       width: getEventWidth(e) + 'px',
       left: getStartTimeOffset(e) + 'px',
+      background: colorMap[e.gameId],
     }"
   >
   </view>
@@ -19,9 +19,10 @@
 <script>
 import dayjs from "@/utils/dayjs";
 import CountDown from "@/components/countDown";
+import { mapGetters } from "vuex";
 export default {
   components: { CountDown },
-  props: ["e", "screenWidth"],
+  props: ["e", "screenWidth", "colorMap"],
   data() {
     return {
       widthPerHour: (this.screenWidth - 80) / 7 / 24,
@@ -103,13 +104,13 @@ $bar-height: 80rpx;
   border-top-right-radius: 8rpx;
   border-bottom-right-radius: 8rpx;
 }
-.color1 {
-  background: linear-gradient(to right, #5597d8, #9acfff);
-}
-.color2 {
-  background: linear-gradient(to right, #8085df, #959dfa);
-}
-.color3 {
-  background: linear-gradient(to right, #84d6cf, #88e0d7);
-}
+// .color1 {
+//   background: linear-gradient(to right, #5597d8, #9acfff);
+// }
+// .color2 {
+//   background: linear-gradient(to right, #8085df, #959dfa);
+// }
+// .color3 {
+//   background: linear-gradient(to right, #84d6cf, #88e0d7);
+// }
 </style>
