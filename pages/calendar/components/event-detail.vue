@@ -1,22 +1,28 @@
 <template>
   <view class="popup-content" :style="{ height: height * 0.6 + 'px' }">
-    <view class="event-name">
-      <view> {{ event.name }}</view>
+    <view class="event-basic">
+      <view class="event-name">
+        <view> {{ event.name }}</view>
+      </view>
+      <view class="event-time">
+        <view>{{ dateStr }}</view>
+        <!-- <view>{{ event.startTime }} - {{ event.endTime }}</view> -->
+        <event-remain :event="event"></event-remain>
+      </view>
+      <view class="event-execution">
+        <event-reward :event="event" size="14"></event-reward>
+        <event-status :event="event" enabled></event-status>
+      </view>
     </view>
-    <view class="event-time">
-      <view>{{ event.startTime }} - {{ event.endTime }}</view>
-      <event-remain :event="event"></event-remain>
+    <view class="event-scroll">
+      <image class="event-image" :src="event.imgUrl" mode="widthFix"></image>
+      <view class="event-desc">{{ event.description }}</view>
     </view>
-    <view class="event-execution">
-      <event-reward :event="event" size="14"></event-reward>
-      <event-status :event="event" enabled></event-status>
-    </view>
-    <image class="event-image" :src="event.imgUrl" mode="widthFix"></image>
-    <!-- <view>{{ event.description }}</view> -->
   </view>
 </template>
 
 <script>
+import dayjs from "@/utils/dayjs";
 import EventRemain from "./event-remain.vue";
 import EventReward from "./event-reward.vue";
 import EventStatus from "./event-status.vue";
@@ -27,6 +33,15 @@ export default {
     return {
       height: 0,
     };
+  },
+  computed: {
+    dateStr() {
+      return (
+        dayjs(this.event.startTime).format("MM-DD HH:mm") +
+        " ~ " +
+        dayjs(this.event.endTime).format("MM-DD HH:mm")
+      );
+    },
   },
   mounted() {
     uni.getSystemInfo({
@@ -71,5 +86,20 @@ export default {
 .event-image {
   width: 100%;
   margin: 20rpx 0;
+}
+.event-desc {
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 26rpx;
+  line-height: 1.6;
+}
+
+.event-basic {
+  flex-shrink: 0;
+  margin-bottom: 20rpx;
+}
+.event-scroll {
+  flex: 1;
+  overflow: auto;
 }
 </style>

@@ -60,15 +60,9 @@
         </view>
       </view>
     </view>
-    <uni-popup
-      ref="popup"
-      background-color="#fff"
-      type="bottom"
-      :is-mask-click="false"
-      @maskClick="maskClick"
-    >
+    <u-popup :show="showDetail" @close="maskClick" round="10">
       <event-detail :event="currentEvent"></event-detail>
-    </uni-popup>
+    </u-popup>
   </view>
 </template>
 
@@ -92,6 +86,8 @@ export default {
       eventList: [],
       days: ["日", "一", "二", "三", "四", "五", "六"],
       currentEvent: {},
+
+      showDetail: false,
     };
   },
   onLoad() {
@@ -199,10 +195,10 @@ export default {
     },
     clickEvent(e) {
       this.currentEvent = e;
-      this.$refs.popup.open();
+      this.showDetail = true;
     },
     maskClick() {
-      this.$refs.popup.close();
+      this.showDetail = false;
     },
     getEventStatus(e) {
       const date1 = dayjs(e.startTime);
