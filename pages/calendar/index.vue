@@ -13,11 +13,22 @@
     />
     <view class="background">
       <view class="blank"></view>
-      <view class="date" v-for="i in 7" :key="'date' + i"> </view>
+      <view
+        class="date"
+        v-for="i in 7"
+        :key="'date' + i"
+        :style="{ 'background-color': i == 2 ? '#f4f4f4' : 'unset' }"
+      >
+      </view>
     </view>
     <view class="week">
       <view class="blank"></view>
-      <view class="date" v-for="i in 7" :key="'date' + i">
+      <view
+        class="date"
+        v-for="i in 7"
+        :key="'date' + i"
+        :style="{ 'background-color': i == 2 ? '#f4f4f4' : 'unset' }"
+      >
         <view>{{ addDays(i - 2) }}</view>
         <view>{{ getDay(i - 2) }}</view>
       </view>
@@ -80,6 +91,8 @@ export default {
   components: { TimeBar, EventDetail, EventRemain, EventStatus, EventReward },
   data() {
     return {
+      loading: false,
+
       firstDay: dayjs().add(-1, "day").startOf("day"),
       lastDay: dayjs().add(6, "day").startOf("day"),
       screenWidth: 0,
@@ -159,16 +172,22 @@ export default {
   methods: {
     // 刷新
     refresh() {
+      if (this.loading) return;
       this.$store.dispatch("user/getDoneList");
       this.$store.dispatch("user/getSettings");
       this.getEventList();
     },
     // 获取事件列表
     getEventList() {
-      getEventList(this.settings.games).then((_) => {
-        this.eventList = _.data || [];
-        this.handleData();
-      });
+      this.loading = true;
+      getEventList(this.settings.games)
+        .then((_) => {
+          this.eventList = _.data || [];
+          this.handleData();
+        })
+        .finally(() => {
+          this.loading = false;
+        });
     },
     // 预处理数据
     handleData() {
