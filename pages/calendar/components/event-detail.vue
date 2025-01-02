@@ -1,8 +1,17 @@
 <template>
   <view class="popup-content" :style="{ height: height * 0.6 + 'px' }">
     <view class="event-basic">
-      <view class="event-name">
-        <view> {{ event.name }}</view>
+      <view class="event-name" @click="toDetailUrl">
+        <view>
+          {{ event.name }}
+        </view>
+        <!-- <u-icon v-if="event.detailUrl" name="arrow-right" size="14"></u-icon> -->
+        <uni-icons
+          v-if="event.detailUrl"
+          type="right"
+          size="14"
+          style="position: relative; top: 1px"
+        ></uni-icons>
       </view>
       <view class="event-time">
         <view>{{ dateStr }}</view>
@@ -50,6 +59,15 @@ export default {
       },
     });
   },
+  methods: {
+    toDetailUrl() {
+      if (this.event.detailUrl) {
+        uni.navigateTo({
+          url: `/pages/webview/index?title=${this.event.name}&src=${this.event.detailUrl}`,
+        });
+      }
+    },
+  },
 };
 </script>
 
@@ -65,7 +83,7 @@ export default {
 .event-name {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  // justify-content: space-between;
   font-weight: bold;
 }
 .event-time {
