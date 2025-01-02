@@ -30,8 +30,12 @@ export default {
         // text += timeData.hours ? timeData.hours + " 小时 " : "";
         text += timeData.days ? timeData.days + " d " : "";
         text += timeData.hours ? timeData.hours + " h " : "";
-      } else {
+      } else if (timeData.hours > 0) {
         text += timeData.hours ? timeData.hours + " h " : "";
+      } else if (timeData.minutes > 0) {
+        text += timeData.minutes + " m";
+      } else {
+        text += timeData.seconds + " s";
       }
       // text += !timeData.days ? timeData.minutes + " 分" : "";
       this.text = text;

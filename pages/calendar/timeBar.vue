@@ -28,7 +28,7 @@ export default {
       widthPerHour: (this.screenWidth - 80) / 7 / 24,
       barHeight: 40,
       firstDay: dayjs().add(-1, "day").startOf("day"),
-      lastDay: dayjs().add(13, "day").startOf("day"),
+      lastDay: dayjs().add(6, "day").startOf("day"),
     };
   },
   mounted() {},
