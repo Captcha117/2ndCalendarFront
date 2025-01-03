@@ -32,6 +32,7 @@
 
 <script>
 import dayjs from "@/utils/dayjs";
+import { openMihoyobbs } from "@/utils/app";
 import EventRemain from "./event-remain.vue";
 import EventReward from "./event-reward.vue";
 import EventStatus from "./event-status.vue";
@@ -62,9 +63,7 @@ export default {
   methods: {
     toDetailUrl() {
       if (this.event.detailUrl) {
-        uni.navigateTo({
-          url: `/pages/webview/index?title=${this.event.name}&src=${this.event.detailUrl}`,
-        });
+        openMihoyobbs(this.event.detailUrl, this.event.name);
       }
     },
   },
