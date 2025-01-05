@@ -12,51 +12,29 @@
       @clickRight="toSettings"
     />
     <view class="background">
-      <view class="blank"></view>
-      <view
-        class="date"
-        v-for="i in 7"
-        :key="'date' + i"
-        :style="{ 'background-color': i == 2 ? '#eeeeee' : '#f5f7fa' }"
-      >
-      </view>
+      <!-- <view class="blank"></view> -->
+      <view class="date" v-for="i in 7" :key="'date' + i"> </view>
     </view>
     <view class="week">
-      <view class="blank" style="border-bottom: 1rpx solid #e5e5e5"></view>
-      <view
-        class="date"
-        v-for="i in 7"
-        :key="'date' + i"
-        :style="{ 'background-color': i == 2 ? '#eeeeee' : 'white' }"
-      >
+      <!-- <view class="blank"></view> -->
+      <view class="date" v-for="i in 7" :key="'date' + i">
         <view>{{ addDays(i - 2) }}</view>
         <view>{{ getDay(i - 2) }}</view>
       </view>
     </view>
     <view class="event">
-      <view class="img-list">
+      <!-- <view class="img-list">
         <view
           v-for="(e, i) in showList"
           class="img-item"
           :key="'event' + i"
           @click="clickEvent(e)"
+          :style="{
+            'background-image': ` url(${e.imgUrl}`,
+          }"
         >
-          <u-image
-            :src="e.imgUrl"
-            mode="scaleToFill"
-            width="100%"
-            height="80rpx"
-          ></u-image>
-          <view
-            class="img-cover"
-            :style="{
-              background: `linear-gradient(to right, transparent, ${
-                colorMap[e.gameId]
-              })`,
-            }"
-          ></view>
         </view>
-      </view>
+      </view> -->
       <view class="event-list">
         <view
           v-for="(e, i) in showList"
@@ -82,9 +60,15 @@
         </view>
       </view>
     </view>
-    <u-popup :show="showDetail" @close="maskClick" round="10">
+    <uni-popup
+      ref="popup"
+      background-color="#fff"
+      type="bottom"
+      :is-mask-click="false"
+      @maskClick="maskClick"
+    >
       <event-detail :event="currentEvent"></event-detail>
-    </u-popup>
+    </uni-popup>
   </view>
 </template>
 
@@ -102,23 +86,18 @@ export default {
   components: { TimeBar, EventDetail, EventRemain, EventStatus, EventReward },
   data() {
     return {
-      loading: false,
-
       firstDay: dayjs().add(-1, "day").startOf("day"),
       lastDay: dayjs().add(6, "day").startOf("day"),
       screenWidth: 0,
       eventList: [],
       days: ["日", "一", "二", "三", "四", "五", "六"],
       currentEvent: {},
-
-      showDetail: false,
     };
   },
   onLoad() {
     uni.getSystemInfo({
       success: (res) => {
-        let rpx = res.screenWidth / (uni.upx2px(100) / 100);
-        this.screenWidth = rpx;
+        this.screenWidth = res.screenWidth;
       },
     });
     this.refresh();
@@ -184,22 +163,16 @@ export default {
   methods: {
     // 刷新
     refresh() {
-      if (this.loading) return;
       this.$store.dispatch("user/getDoneList");
       this.$store.dispatch("user/getSettings");
       this.getEventList();
     },
     // 获取事件列表
     getEventList() {
-      this.loading = true;
-      getEventList(this.settings.games)
-        .then((_) => {
-          this.eventList = _.data || [];
-          this.handleData();
-        })
-        .finally(() => {
-          this.loading = false;
-        });
+      getEventList(this.settings.games).then((_) => {
+        this.eventList = _.data || [];
+        this.handleData();
+      });
     },
     // 预处理数据
     handleData() {
@@ -226,10 +199,10 @@ export default {
     },
     clickEvent(e) {
       this.currentEvent = e;
-      this.showDetail = true;
+      this.$refs.popup.open();
     },
     maskClick() {
-      this.showDetail = false;
+      this.$refs.popup.close();
     },
     getEventStatus(e) {
       const date1 = dayjs(e.startTime);
@@ -265,7 +238,7 @@ export default {
   height: 100%;
   width: 100%;
   top: 0;
-  background-color: #f5f7fa;
+  background-color: white;
   display: flex;
 }
 .week {
@@ -283,7 +256,7 @@ export default {
 .date {
   box-sizing: border-box;
   border: 1rpx solid #e5e5e5;
-  background-color: #f5f7fa;
+  background-color: white;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -306,21 +279,12 @@ export default {
   z-index: 1;
 }
 .img-item {
-  height: 80rpx;
-  // border: 1rpx solid #e5e5e5;
+  height: 120rpx;
+  border: 1rpx solid #e5e5e5;
   border-left-width: 0;
   background-size: auto 120rpx;
   background-repeat: no-repeat;
   background-position: left;
-  margin-top: 20rpx;
-  position: relative;
-}
-.img-cover {
-  width: 50%;
-  height: 100%;
-  position: absolute;
-  right: 0;
-  top: 0;
 }
 .event-list {
   flex: 1;
@@ -329,30 +293,24 @@ export default {
 .event-row {
   position: relative;
   color: white;
-  height: 80rpx;
+  height: 124rpx;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  // padding: 0 20rpx;
+  padding: 0 20rpx;
   font-size: 28rpx;
-  margin-top: 20rpx;
 }
 .event-text {
-  // z-index: 10;
-  margin-left: 20rpx;
-  color: rgba(0, 0, 0, 0.85);
-  // text-shadow: 0 0 8rpx black;
+  z-index: 10;
+  text-shadow: 0 0 8rpx black;
   // position: absolute;
 }
 .event-name {
-  font-size: 28rpx;
 }
 .event-remain {
   z-index: 10;
-  margin-right: 20rpx;
 }
 .event-status {
   z-index: 10;
-  margin-right: 20rpx;
 }
 </style>
