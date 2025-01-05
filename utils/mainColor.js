@@ -116,3 +116,22 @@ export function getUniMainColor(src, vm) {
     },
   });
 }
+
+export function mixColorWithWhite(hexColor, whitePercentage) {
+  // 将十六进制颜色转换为RGB
+  const r = parseInt(hexColor.substring(1, 3), 16);
+  const g = parseInt(hexColor.substring(3, 5), 16);
+  const b = parseInt(hexColor.substring(5, 7), 16);
+
+  // 计算混合后的RGB值
+  const newR = Math.round(r * (1 - whitePercentage) + 255 * whitePercentage);
+  const newG = Math.round(g * (1 - whitePercentage) + 255 * whitePercentage);
+  const newB = Math.round(b * (1 - whitePercentage) + 255 * whitePercentage);
+
+  // 将新的RGB值转换回十六进制
+  const newHexColor = `#${newR.toString(16).padStart(2, "0")}${newG
+    .toString(16)
+    .padStart(2, "0")}${newB.toString(16).padStart(2, "0")}`;
+
+  return newHexColor;
+}

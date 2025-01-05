@@ -8,9 +8,11 @@
       },
     ]"
     :style="{
-      width: getEventWidth(e) + 'px',
-      left: getStartTimeOffset(e) + 'px',
-      background: colorMap[e.gameId],
+      width: getEventWidth(e) + 'rpx',
+      left: getStartTimeOffset(e) + 'rpx',
+      background: `linear-gradient(to right, ${colorMap[e.gameId][0]}, ${
+        colorMap[e.gameId][1]
+      })`,
     }"
   >
   </view>
@@ -25,7 +27,7 @@ export default {
   props: ["e", "screenWidth", "colorMap"],
   data() {
     return {
-      widthPerHour: (this.screenWidth - 80) / 7 / 24,
+      widthPerHour: (this.screenWidth - 160) / 7 / 24,
       barHeight: 40,
       firstDay: dayjs().add(-1, "day").startOf("day"),
       lastDay: dayjs().add(6, "day").startOf("day"),

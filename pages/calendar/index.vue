@@ -17,7 +17,7 @@
         class="date"
         v-for="i in 7"
         :key="'date' + i"
-        :style="{ 'background-color': i == 2 ? '#f4f4f4' : 'unset' }"
+        :style="{ 'background-color': i == 2 ? '#f4f4f4' : 'white' }"
       >
       </view>
     </view>
@@ -27,7 +27,7 @@
         class="date"
         v-for="i in 7"
         :key="'date' + i"
-        :style="{ 'background-color': i == 2 ? '#f4f4f4' : 'unset' }"
+        :style="{ 'background-color': i == 2 ? '#f4f4f4' : 'white' }"
       >
         <view>{{ addDays(i - 2) }}</view>
         <view>{{ getDay(i - 2) }}</view>
@@ -40,10 +40,21 @@
           class="img-item"
           :key="'event' + i"
           @click="clickEvent(e)"
-          :style="{
-            'background-image': ` url(${e.imgUrl}`,
-          }"
         >
+          <u-image
+            :src="e.imgUrl"
+            mode="scaleToFill"
+            width="100%"
+            height="80rpx"
+          ></u-image>
+          <view
+            class="img-cover"
+            :style="{
+              background: `linear-gradient(to right, transparent, ${
+                colorMap[e.gameId][0]
+              })`,
+            }"
+          ></view>
         </view>
       </view>
       <view class="event-list">
@@ -87,6 +98,7 @@ import EventStatus from "./components/event-status.vue";
 import EventReward from "./components/event-reward.vue";
 import { mapGetters } from "vuex";
 import { getEventList, getGameList } from "./api";
+import { mixColorWithWhite } from "@/utils/mainColor";
 export default {
   components: { TimeBar, EventDetail, EventRemain, EventStatus, EventReward },
   data() {
@@ -106,7 +118,8 @@ export default {
   onLoad() {
     uni.getSystemInfo({
       success: (res) => {
-        this.screenWidth = res.screenWidth;
+        let rpx = res.screenWidth / (uni.upx2px(100) / 100);
+        this.screenWidth = rpx;
       },
     });
     this.refresh();
@@ -156,7 +169,7 @@ export default {
     colorMap() {
       let r = {};
       this.gameList.forEach((g) => {
-        r[g.id] = g.color;
+        r[g.id] = [g.color, mixColorWithWhite(g.color, 0.25)];
       });
       return r;
     },
@@ -294,12 +307,21 @@ export default {
   z-index: 1;
 }
 .img-item {
-  height: 120rpx;
-  border: 1rpx solid #e5e5e5;
+  height: 80rpx;
+  // border: 1rpx solid #e5e5e5;
   border-left-width: 0;
   background-size: auto 120rpx;
   background-repeat: no-repeat;
   background-position: left;
+  margin-top: 20rpx;
+  position: relative;
+}
+.img-cover {
+  width: 50%;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 .event-list {
   flex: 1;
@@ -308,19 +330,22 @@ export default {
 .event-row {
   position: relative;
   color: white;
-  height: 124rpx;
+  height: 80rpx;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 20rpx;
   font-size: 28rpx;
+  margin-top: 20rpx;
 }
 .event-text {
   z-index: 10;
-  text-shadow: 0 0 8rpx black;
+  // text-shadow: 0 0 8rpx black;
   // position: absolute;
 }
 .event-name {
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 28rpx;
 }
 .event-remain {
   z-index: 10;
