@@ -118,6 +118,7 @@ export function getUniMainColor(src, vm) {
 }
 
 export function mixColorWithWhite(hexColor, whitePercentage) {
+  if(!hexColor) return;
   // 将十六进制颜色转换为RGB
   const r = parseInt(hexColor.substring(1, 3), 16);
   const g = parseInt(hexColor.substring(3, 5), 16);

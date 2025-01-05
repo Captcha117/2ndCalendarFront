@@ -1,32 +1,41 @@
 <template>
-  <view
-    class="time-bar"
-    :class="[
-      {
-        'left-radius': firstDayBeforeStartTime(e),
-        'right-radius': endTimeBeforeLastDay(e),
-      },
-    ]"
-    :style="{
-      width: getEventWidth(e) + 'rpx',
-      left: getStartTimeOffset(e) + 'rpx',
-      background: `linear-gradient(to right, ${colorMap[e.gameId][0]}, ${
-        colorMap[e.gameId][1]
-      })`,
-    }"
-  >
+  <view style="width: 100%" class="time-bar">
+    <view
+      class="time-bar"
+      :class="[
+        {
+          'left-radius': firstDayBeforeStartTime(e),
+          'right-radius': endTimeBeforeLastDay(e),
+        },
+      ]"
+      :style="{
+        width: getEventWidth(e) + 'rpx',
+        left: getStartTimeOffset(e) + 'rpx',
+        background: `linear-gradient(to right, ${
+          colorMap[e.gameId]
+        }, ${mixColorWithWhite(colorMap[e.gameId], 0.25)})`,
+      }"
+    >
+      <view class="event-text">
+        <view class="event-name">{{ e.name }}</view>
+        <event-reward :event="e"></event-reward>
+      </view>
+    </view>
   </view>
 </template>
 
 <script>
 import dayjs from "@/utils/dayjs";
 import CountDown from "@/components/countDown";
+import EventReward from "./components/event-reward.vue";
 import { mapGetters } from "vuex";
+import { mixColorWithWhite } from "@/utils/mainColor";
 export default {
-  components: { CountDown },
+  components: { CountDown, EventReward },
   props: ["e", "screenWidth", "colorMap"],
   data() {
     return {
+      mixColorWithWhite,
       widthPerHour: (this.screenWidth - 160) / 7 / 24,
       barHeight: 40,
       firstDay: dayjs().add(-1, "day").startOf("day"),
@@ -69,6 +78,8 @@ export default {
 
 <style scoped lang="scss">
 $bar-height: 80rpx;
+.time-bar-view {
+}
 .time-bar {
   width: 200rpx;
   height: $bar-height;
@@ -76,6 +87,10 @@ $bar-height: 80rpx;
   // display: flex;
   // align-items: center;
   // justify-content: space-between;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
 }
 .event-image {
   height: $bar-height;
@@ -115,4 +130,14 @@ $bar-height: 80rpx;
 // .color3 {
 //   background: linear-gradient(to right, #84d6cf, #88e0d7);
 // }
+.event-text {
+  position: absolute;
+  left: 0;
+  color: white;
+  padding: 0 20rpx;
+  width: 710rpx;
+}
+.event-name {
+  font-size: 28rpx;
+}
 </style>

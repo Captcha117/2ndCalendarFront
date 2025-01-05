@@ -51,7 +51,7 @@
             class="img-cover"
             :style="{
               background: `linear-gradient(to right, transparent, ${
-                colorMap[e.gameId][0]
+                colorMap[e.gameId]
               })`,
             }"
           ></view>
@@ -98,7 +98,6 @@ import EventStatus from "./components/event-status.vue";
 import EventReward from "./components/event-reward.vue";
 import { mapGetters } from "vuex";
 import { getEventList, getGameList } from "./api";
-import { mixColorWithWhite } from "@/utils/mainColor";
 export default {
   components: { TimeBar, EventDetail, EventRemain, EventStatus, EventReward },
   data() {
@@ -169,7 +168,7 @@ export default {
     colorMap() {
       let r = {};
       this.gameList.forEach((g) => {
-        r[g.id] = [g.color, mixColorWithWhite(g.color, 0.25)];
+        r[g.id] = g.color;
       });
       return r;
     },
@@ -334,23 +333,26 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20rpx;
+  // padding: 0 20rpx;
   font-size: 28rpx;
   margin-top: 20rpx;
 }
 .event-text {
-  z-index: 10;
+  // z-index: 10;
+  margin-left: 20rpx;
+  color: rgba(0, 0, 0, 0.85);
   // text-shadow: 0 0 8rpx black;
   // position: absolute;
 }
 .event-name {
-  color: rgba(0, 0, 0, 0.85);
   font-size: 28rpx;
 }
 .event-remain {
   z-index: 10;
+  margin-right: 20rpx;
 }
 .event-status {
   z-index: 10;
+  margin-right: 20rpx;
 }
 </style>
