@@ -17,7 +17,7 @@
         class="date"
         v-for="i in 7"
         :key="'date' + i"
-        :style="{ 'background-color': i == 2 ? '#f4f4f4' : 'white' }"
+        :style="{ 'background-color': i == 2 ? '#eeeeee' : '#f5f7fa' }"
       >
       </view>
     </view>
@@ -27,7 +27,7 @@
         class="date"
         v-for="i in 7"
         :key="'date' + i"
-        :style="{ 'background-color': i == 2 ? '#f4f4f4' : 'white' }"
+        :style="{ 'background-color': i == 2 ? '#eeeeee' : '#f5f7fa' }"
       >
         <view>{{ addDays(i - 2) }}</view>
         <view>{{ getDay(i - 2) }}</view>
@@ -265,7 +265,7 @@ export default {
   height: 100%;
   width: 100%;
   top: 0;
-  background-color: white;
+  background-color: #f5f7fa;
   display: flex;
 }
 .week {
@@ -278,12 +278,12 @@ export default {
 }
 .blank {
   width: 160rpx;
-  background: white;
+  background: #f5f7fa;
 }
 .date {
   box-sizing: border-box;
   border: 1rpx solid #e5e5e5;
-  background-color: white;
+  background-color: #f5f7fa;
   flex: 1;
   display: flex;
   flex-direction: column;

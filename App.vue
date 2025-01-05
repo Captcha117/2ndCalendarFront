@@ -17,4 +17,7 @@ export default {
 ::v-deep .uni-nav-bar-text {
   font-weight: bold;
 }
+page {
+  background-color: #f5f7fa;
+}
 </style>
