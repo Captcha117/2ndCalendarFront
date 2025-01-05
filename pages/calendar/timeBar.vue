@@ -139,5 +139,6 @@ $bar-height: 80rpx;
 }
 .event-name {
   font-size: 28rpx;
+  font-weight: bold;
 }
 </style>

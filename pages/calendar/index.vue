@@ -22,7 +22,7 @@
       </view>
     </view>
     <view class="week">
-      <view class="blank" style="border-bottom: 1rpx solid #e5e5e5"></view>
+      <view class="blank"></view>
       <view
         class="date"
         v-for="i in 7"
@@ -279,10 +279,13 @@ export default {
 .blank {
   width: 160rpx;
   background: white;
+  border: 1rpx solid #e5e5e5;
+  border-width: 0 1rpx 1rpx 0;
 }
 .date {
   box-sizing: border-box;
   border: 1rpx solid #e5e5e5;
+  border-width: 1rpx 1rpx 1rpx 0;
   background-color: #f5f7fa;
   flex: 1;
   display: flex;
@@ -346,6 +349,7 @@ export default {
 }
 .event-name {
   font-size: 28rpx;
+  font-weight: bold;
 }
 .event-remain {
   z-index: 10;
