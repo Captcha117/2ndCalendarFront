@@ -8,3 +8,12 @@ export function getEventList(data) {
     data,
   });
 }
+
+// 根据文章ID获取活动详情
+export function getEventDetailByPostId(postId) {
+  return http.request({
+    url: "/calendar/event/getEventDetailByPostId",
+    method: "post",
+    data: { postId },
+  });
+}

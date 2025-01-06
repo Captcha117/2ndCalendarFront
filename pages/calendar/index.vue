@@ -97,7 +97,7 @@ import EventRemain from "./components/event-remain.vue";
 import EventStatus from "./components/event-status.vue";
 import EventReward from "./components/event-reward.vue";
 import { mapGetters } from "vuex";
-import { getEventList, getGameList } from "./api";
+import { getEventList, getEventDetailByPostId } from "./api";
 export default {
   components: { TimeBar, EventDetail, EventRemain, EventStatus, EventReward },
   data() {
@@ -227,6 +227,7 @@ export default {
     clickEvent(e) {
       this.currentEvent = e;
       this.showDetail = true;
+      // getEventDetailByPostId("60531688");
     },
     maskClick() {
       this.showDetail = false;
