@@ -16,7 +16,10 @@
         }, ${mixColorWithWhite(colorMap[e.gameId], 0.25)})`,
       }"
     >
-      <view class="event-text">
+      <view
+        class="event-text"
+        :style="{ left: -getStartTimeOffset(e) + 'rpx' }"
+      >
         <view class="event-name">{{ e.name }}</view>
         <event-reward :event="e"></event-reward>
       </view>
