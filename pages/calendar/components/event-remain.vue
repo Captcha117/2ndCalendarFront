@@ -56,7 +56,7 @@ export default {
   line-height: 48rpx;
   font-size: 24rpx;
   padding: 0 14rpx;
-  border-radius: 8rpx;
+  border-radius: 6rpx;
   background: #ffffffe6;
   color: #bcb5af;
   border: 2rpx solid #bcb5af;

@@ -1,17 +1,22 @@
 <template>
   <view class="popup-content" :style="{ height: height * 0.6 + 'px' }">
     <view class="event-basic">
-      <view class="event-name" @click="toDetailUrl">
-        <view>
-          {{ event.name }}
+      <view class="event-header">
+        <view class="event-name" @click="toDetailUrl">
+          <view>{{ event.name }}</view>
+          <!-- <u-icon v-if="event.detailUrl" name="arrow-right" size="14"></u-icon> -->
+          <uni-icons
+            v-if="event.detailUrl"
+            type="right"
+            size="14"
+            style="position: relative; top: 1px"
+          ></uni-icons>
         </view>
-        <!-- <u-icon v-if="event.detailUrl" name="arrow-right" size="14"></u-icon> -->
-        <uni-icons
-          v-if="event.detailUrl"
-          type="right"
-          size="14"
-          style="position: relative; top: 1px"
-        ></uni-icons>
+        <u-tag
+          v-if="event.categoryName"
+          :text="event.categoryName"
+          plain
+        ></u-tag>
       </view>
       <view class="event-time">
         <view>{{ dateStr }}</view>
@@ -79,6 +84,11 @@ export default {
   background-color: #fff;
   border-radius: 40rpx 40rpx 0 0;
 }
+.event-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 .event-name {
   display: flex;
   align-items: center;
@@ -103,6 +113,7 @@ export default {
 .event-image {
   width: 100%;
   margin: 20rpx 0;
+  border-radius: 10rpx;
 }
 .event-desc {
   white-space: pre-wrap;

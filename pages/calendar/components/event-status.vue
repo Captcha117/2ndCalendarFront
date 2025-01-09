@@ -46,7 +46,7 @@ export default {
     margin-right: 10rpx;
   }
   height: 48rpx;
-  border-radius: 8rpx;
+  border-radius: 6rpx;
   opacity: 1;
   line-height: 48rpx;
   padding: 0 14rpx;
