@@ -1,4 +1,7 @@
 <template>
+  <page-meta
+    :page-style="'overflow:' + (showDetail ? 'hidden' : 'visible')"
+  ></page-meta>
   <view class="calendar-page">
     <uni-nav-bar
       :fixed="true"
