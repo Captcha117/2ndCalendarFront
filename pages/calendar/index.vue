@@ -163,7 +163,7 @@ export default {
         // 按游戏排序
         list.sort((a, b) => {
           if (a.gameId !== b.gameId) {
-            return Number(a.gameId) - Number(b.gameId);
+            return a.gameId.localeCompare(b.gameId);
           } else {
             return new Date(a.endTime) - new Date(b.endTime);
           }
