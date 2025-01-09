@@ -41,6 +41,7 @@
     "selectedColor": "#5ec468",
     "borderStyle": "white",
     "backgroundColor": "#ffffff",
+    "height": "0",
     "list": [
       {
         "pagePath": "pages/calendar/index",

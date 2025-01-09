@@ -85,6 +85,7 @@
     <u-popup :show="showDetail" @close="maskClick" round="10">
       <event-detail :event="currentEvent"></event-detail>
     </u-popup>
+<my-tab-bar :index="0" />
   </view>
 </template>
 
@@ -96,10 +97,18 @@ import EventDetail from "./components/event-detail.vue";
 import EventRemain from "./components/event-remain.vue";
 import EventStatus from "./components/event-status.vue";
 import EventReward from "./components/event-reward.vue";
+import MyTabBar from "@/components/myTabBar/index.vue";
 import { mapGetters } from "vuex";
 import { getEventList, getEventDetailByPostId } from "./api";
 export default {
-  components: { TimeBar, EventDetail, EventRemain, EventStatus, EventReward },
+  components: {
+    TimeBar,
+    EventDetail,
+    EventRemain,
+    EventStatus,
+    EventReward,
+    MyTabBar,
+  },
   data() {
     return {
       loading: false,
@@ -115,6 +124,7 @@ export default {
     };
   },
   onLoad() {
+    uni.hideTabBar();
     uni.getSystemInfo({
       success: (res) => {
         let rpx = res.screenWidth / (uni.upx2px(100) / 100);
@@ -353,11 +363,11 @@ export default {
   font-weight: bold;
 }
 .event-remain {
-  z-index: 10;
+  z-index: 1;
   margin-right: 20rpx;
 }
 .event-status {
-  z-index: 10;
+  z-index: 1;
   margin-right: 20rpx;
 }
 </style>

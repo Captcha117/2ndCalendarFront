@@ -10,13 +10,15 @@
       title="设置"
     />
     <my-list :list="menu" @command="handleCommand"> </my-list>
+<my-tab-bar :index="1" />
   </view>
 </template>
 
 <script>
 import MyList from "@/components/myList";
+import MyTabBar from "@/components/myTabBar/index.vue";
 export default {
-  components: { MyList },
+  components: { MyList, MyTabBar },
   data() {
     return {
       version: "",
