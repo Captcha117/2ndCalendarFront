@@ -129,9 +129,9 @@ const http = {
   },
   addHeader(config) {
     const timestamp = +new Date();
-    config.header["timestamp"] = timestamp;
+    // config.header["timestamp"] = timestamp;
     config.header["token"] = getToken() || "tourist";
-    config.header["x-client-type"] = "app";
+    // config.header["x-client-type"] = "app";
   },
   formatUrl(config) {
     const isAbsoluteUrl = /(http|https):\/\/([\w.]+\/?)\S*/.test(config.url);

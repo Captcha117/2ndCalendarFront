@@ -11,6 +11,7 @@ const defaultSettings = {
   order: "asc",
   status: [0, 1, 2],
   done: [false, true],
+  showImg: 1,
 };
 
 const state = getDefaultState();

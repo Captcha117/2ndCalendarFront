@@ -88,14 +88,14 @@
     <u-popup :show="showDetail" @close="maskClick" round="10">
       <event-detail :event="currentEvent"></event-detail>
     </u-popup>
-<my-tab-bar :index="0" />
+    <my-tab-bar :index="0" />
   </view>
 </template>
 
 <script>
 import dayjs from "@/utils/dayjs";
 import TimeBar from "./timeBar.vue";
-import events from "./event.js";
+import * as data from "./data.js";
 import EventDetail from "./components/event-detail.vue";
 import EventRemain from "./components/event-remain.vue";
 import EventStatus from "./components/event-status.vue";
@@ -205,6 +205,11 @@ export default {
     // 获取事件列表
     getEventList() {
       this.loading = true;
+      if (data.test) {
+        this.eventList = data.eventList;
+        this.handleData();
+        return;
+      }
       getEventList(this.settings.games)
         .then((_) => {
           this.eventList = _.data || [];

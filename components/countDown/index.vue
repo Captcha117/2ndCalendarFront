@@ -3,7 +3,7 @@
     v-if="time > 0"
     :time="time || 0"
     format="DD:HH:mm:ss"
-    autoStart
+    :autoStart="false"
     millisecond
     @change="onChange"
     class="count-down"

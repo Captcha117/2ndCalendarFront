@@ -51,6 +51,13 @@
           ></uni-data-checkbox>
         </uni-forms-item>
       </uni-forms>
+      <uni-forms-item label="图片">
+        <uni-data-checkbox
+          v-model="form.showImg"
+          wrap
+          :localdata="showImgOptions"
+        ></uni-data-checkbox>
+      </uni-forms-item>
     </view>
   </view>
 </template>
@@ -87,6 +94,10 @@ export default {
         { text: "bilibili", value: "bilibili" },
         { text: "小红书", value: "xhs" },
       ],
+      showImgOptions: [
+        { text: "显示", value: 1 },
+        { text: "隐藏", value: 0 },
+      ],
     };
   },
   computed: {
@@ -97,7 +108,7 @@ export default {
   },
   mounted() {
     this.form = { ...this.settings };
-    if (this.form.games.length == 0) {
+    if (this.form?.games?.length == 0) {
       this.form.games = this.gameList.map((x) => x.id);
     }
   },
