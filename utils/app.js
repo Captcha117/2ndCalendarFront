@@ -14,10 +14,15 @@ export function openApp(url, cb) {
 
 export function openMihoyobbs(url, title) {
   if (url) {
+    // #ifdef H5
+    window.open(url);
+    // #endif
+    // #ifdef APP-PLUS
     openApp("mihoyobbs://article" + url.substring(url.lastIndexOf("/")), () => {
       uni.navigateTo({
         url: `/pages/webview/index?title=${title}&src=${url}`,
       });
     });
+    // #endif
   }
 }
