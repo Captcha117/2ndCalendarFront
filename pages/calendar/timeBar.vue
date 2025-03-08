@@ -35,15 +35,19 @@ import { mapGetters } from "vuex";
 import { mixColorWithWhite } from "@/utils/mainColor";
 export default {
   components: { CountDown, EventReward },
-  props: ["e", "screenWidth", "colorMap"],
+  props: ["e", "screenWidth", "colorMap", "showImg"],
   data() {
     return {
       mixColorWithWhite,
-      widthPerHour: (this.screenWidth - 160) / 7 / 24,
       barHeight: 40,
       firstDay: dayjs().add(-1, "day").startOf("day"),
       lastDay: dayjs().add(6, "day").startOf("day"),
     };
+  },
+  computed: {
+    widthPerHour() {
+      return (this.screenWidth - (this.showImg ? 160 : 0)) / 7 / 24;
+    },
   },
   mounted() {},
   methods: {

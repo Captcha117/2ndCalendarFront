@@ -4,7 +4,8 @@
     {
       "path": "pages/calendar/index",
       "style": {
-        "navigationStyle": "custom"
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": true
       }
     },
     {

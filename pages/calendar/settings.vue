@@ -108,25 +108,26 @@ export default {
   },
   mounted() {
     this.form = { ...this.settings };
-    if (this.form?.games?.length == 0) {
-      this.form.games = this.gameList.map((x) => x.id);
-    }
+    // if (this.form?.games?.length == 0) {
+    //   this.form.games = this.gameList.map((x) => x.id);
+    // }
   },
   methods: {
     back() {
       uni.navigateBack({ delta: 1 });
     },
     confirm() {
-      if (this.form.games.length == 0) {
-        uni.showToast({
-          mask: true,
-          icon: "none",
-          title: "请选择游戏",
-          duration: 2000,
-        });
-        return;
-      }
+      // if (this.form.games.length == 0) {
+      //   uni.showToast({
+      //     mask: true,
+      //     icon: "none",
+      //     title: "请选择游戏",
+      //     duration: 2000,
+      //   });
+      //   return;
+      // }
       this.$store.dispatch("user/setSettings", this.form);
+      uni.setStorageSync("refresh", true);
       this.back();
     },
   },

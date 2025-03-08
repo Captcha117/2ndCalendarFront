@@ -15,7 +15,7 @@
       @clickRight="toSettings"
     />
     <view class="background">
-      <view class="blank"></view>
+      <view class="blank" v-if="showImg"></view>
       <view
         class="date"
         v-for="i in 7"
@@ -25,7 +25,7 @@
       </view>
     </view>
     <view class="week">
-      <view class="blank"></view>
+      <view class="blank" v-if="showImg"></view>
       <view
         class="date"
         v-for="i in 7"
@@ -37,7 +37,7 @@
       </view>
     </view>
     <view class="event">
-      <view class="img-list">
+      <view class="img-list" v-if="showImg">
         <view
           v-for="(e, i) in showList"
           class="img-item"
@@ -71,6 +71,7 @@
             :e="e"
             :screenWidth="screenWidth"
             :colorMap="colorMap"
+            :showImg="showImg"
           ></time-bar>
           <view class="event-text">
             <view class="event-name">{{ e.name }}</view>
@@ -127,17 +128,30 @@ export default {
     };
   },
   onLoad() {
-    uni.hideTabBar();
     uni.getSystemInfo({
       success: (res) => {
         let rpx = res.screenWidth / (uni.upx2px(100) / 100);
         this.screenWidth = rpx;
       },
     });
+    // uni.startPullDownRefresh();
+  },
+  onPullDownRefresh() {
     this.refresh();
+    // uni.stopPullDownRefresh();
+  },
+  onShow() {
+    let refresh = uni.getStorageSync("refresh");
+    if (refresh) {
+      uni.setStorageSync("refresh", false);
+      uni.startPullDownRefresh();
+    }
   },
   computed: {
     ...mapGetters(["doneList", "settings", "gameList"]),
+    showImg() {
+      return !!this.settings.showImg;
+    },
     showList() {
       let { prop, order, status, done } = this.settings;
       let list = this.eventList.filter(
@@ -186,9 +200,6 @@ export default {
       return r;
     },
   },
-  onShow() {
-    this.refresh();
-  },
   mounted() {
     this.$store.dispatch("sys/getGameList").then((_) => {
       this.refresh();
@@ -210,14 +221,21 @@ export default {
         this.handleData();
         return;
       }
-      getEventList(this.settings.games)
-        .then((_) => {
-          this.eventList = _.data || [];
-          this.handleData();
-        })
-        .finally(() => {
-          this.loading = false;
-        });
+      if (this.settings.games.length > 0) {
+        getEventList(this.settings.games)
+          .then((_) => {
+            this.eventList = _.data || [];
+            this.handleData();
+          })
+          .finally(() => {
+            this.loading = false;
+            uni.stopPullDownRefresh();
+          });
+      } else {
+        this.eventList = [];
+        this.loading = false;
+        uni.stopPullDownRefresh();
+      }
     },
     // 预处理数据
     handleData() {
