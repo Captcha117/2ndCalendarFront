@@ -21,7 +21,13 @@
       }
     },
     {
-      "path": "pages/settings/index",
+      "path": "pages/my/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/my/log/index",
       "style": {
         "navigationStyle": "custom"
       }
@@ -53,8 +59,8 @@
       //   "text": "时间轴"
       // }
       {
-        "pagePath": "pages/settings/index",
-        "text": "设置"
+        "pagePath": "pages/my/index",
+        "text": "我的"
       }
     ]
   }

@@ -22,7 +22,7 @@ export default {
     return {
       items: [
         { label: "活动日历", icon: "calendar", path: "/pages/calendar/index" },
-        { label: "我的", icon: "account", path: "/pages/settings/index" },
+        { label: "我的", icon: "account", path: "/pages/my/index" },
       ],
     };
   },

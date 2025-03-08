@@ -7,7 +7,7 @@
       background-color="#F8F8F8"
       color="black"
       status-bar
-      title="设置"
+      title="我的"
     />
     <my-list :list="menu" @command="handleCommand"> </my-list>
     <my-tab-bar :index="1" />
@@ -34,13 +34,16 @@ export default {
   computed: {
     menu() {
       {
-        let menu = [{ label: "版本号", value: this.version }];
+        let menu = [
+          { label: "版本号", value: this.version },
+          { label: "更新日志", path: "/pages/my/log/index" },
+        ];
         return menu;
       }
     },
   },
-  method: {
-    handleCommand() {},
+  methods: {
+    handleCommand(item) {},
   },
 };
 </script>
