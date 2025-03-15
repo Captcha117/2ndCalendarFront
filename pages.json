@@ -10,31 +10,19 @@
     },
     {
       "path": "pages/calendar/settings",
-      "style": {
-        "navigationStyle": "custom"
-      }
+      "style": { "navigationStyle": "custom" }
+    },
+    {
+      "path": "pages/calendar/gameList",
+      "style": { "navigationStyle": "custom" }
     },
     {
       "path": "pages/timeline/index",
-      "style": {
-        "navigationBarTitleText": "时间轴"
-      }
+      "style": { "navigationBarTitleText": "时间轴" }
     },
-    {
-      "path": "pages/my/index",
-      "style": {
-        "navigationStyle": "custom"
-      }
-    },
-    {
-      "path": "pages/my/log/index",
-      "style": {
-        "navigationStyle": "custom"
-      }
-    },
-    {
-      "path": "pages/webview/index"
-    }
+    { "path": "pages/my/index", "style": { "navigationStyle": "custom" } },
+    { "path": "pages/my/log/index", "style": { "navigationStyle": "custom" } },
+    { "path": "pages/webview/index" }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
@@ -52,7 +40,7 @@
     "list": [
       {
         "pagePath": "pages/calendar/index",
-        "text": "活动日历"
+        "text": ""
       },
       // {
       //   "pagePath": "pages/timeline/index",
@@ -60,7 +48,7 @@
       // }
       {
         "pagePath": "pages/my/index",
-        "text": "我的"
+        "text": ""
       }
     ]
   }
