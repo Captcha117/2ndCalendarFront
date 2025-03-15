@@ -35,7 +35,9 @@ export default {
     menu() {
       {
         let menu = [
+          // #ifdef APP-PLUS
           { label: "版本号", value: this.version },
+          // #endif
           { label: "更新日志", path: "/pages/my/log/index" },
         ];
         return menu;

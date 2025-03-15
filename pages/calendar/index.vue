@@ -10,16 +10,16 @@
       background-color="#F8F8F8"
       color="black"
       status-bar
-      right-icon="settings"
+      left-icon="settings"
       title="活动日历"
-      @clickRight="toSettings"
+      @clickLeft="toSettings"
     />
-    <view class="background">
+    <view class="background" v-if="showList.length">
       <view class="blank" v-if="showImg"></view>
       <view
         class="date"
         v-for="i in 7"
-        :key="'date' + i"
+        :key="i"
         :style="{ 'background-color': i == 2 ? '#eeeeee' : '#f5f7fa' }"
       >
       </view>
@@ -29,7 +29,7 @@
       <view
         class="date"
         v-for="i in 7"
-        :key="'date' + i"
+        :key="-i"
         :style="{ 'background-color': i == 2 ? '#eeeeee' : 'white' }"
       >
         <view>{{ addDays(i - 2) }}</view>
@@ -41,12 +41,12 @@
         <view
           v-for="(e, i) in showList"
           class="img-item"
-          :key="'event' + i"
+          :key="e.id"
           @click="clickEvent(e)"
         >
           <u-image
             :src="e.imgUrl"
-            mode="scaleToFill"
+            mode="aspectFill"
             width="100%"
             height="80rpx"
           ></u-image>
@@ -64,7 +64,7 @@
         <view
           v-for="(e, i) in showList"
           class="event-row"
-          :key="'event' + i"
+          :key="e.id"
           @click="clickEvent(e)"
         >
           <time-bar
@@ -86,6 +86,10 @@
         </view>
       </view>
     </view>
+    <div style="margin-top: 120rpx">
+      <u-empty v-if="showList.length == 0" mode="data" :text="emptyText">
+      </u-empty>
+    </div>
     <u-popup :show="showDetail" @close="maskClick" round="10">
       <event-detail :event="currentEvent"></event-detail>
     </u-popup>
@@ -141,8 +145,8 @@ export default {
     // uni.stopPullDownRefresh();
   },
   onShow() {
-    let refresh = uni.getStorageSync("refresh");
-    if (refresh) {
+    let forceRefresh = uni.getStorageSync("refresh");
+    if (forceRefresh) {
       uni.setStorageSync("refresh", false);
       uni.startPullDownRefresh();
     }
@@ -191,6 +195,11 @@ export default {
         list.reverse();
       }
       return list;
+    },
+    emptyText() {
+      return this.settings?.games?.length > 0
+        ? "暂无活动数据"
+        : "请在左上角设置中选择游戏";
     },
     colorMap() {
       let r = {};

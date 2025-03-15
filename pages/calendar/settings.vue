@@ -9,9 +9,7 @@
       status-bar
       title="活动日历设置"
       left-icon="left"
-      right-text="确定"
       @clickLeft="back"
-      @clickRight="confirm"
     />
     <view class="calendar-setting">
       <uni-forms ref="baseForm" :modelValue="form">
@@ -50,14 +48,38 @@
             :localdata="doneOptions"
           ></uni-data-checkbox>
         </uni-forms-item>
+        <uni-forms-item label="图片">
+          <uni-data-checkbox
+            v-model="form.showImg"
+            wrap
+            :localdata="showImgOptions"
+          ></uni-data-checkbox>
+        </uni-forms-item>
       </uni-forms>
-      <uni-forms-item label="图片">
-        <uni-data-checkbox
-          v-model="form.showImg"
-          wrap
-          :localdata="showImgOptions"
-        ></uni-data-checkbox>
-      </uni-forms-item>
+
+      <!-- <u--form labelPosition="left" :model="form" ref="uForm">
+        <u-form-item label="游戏" prop="prop" borderBottom>
+          <u-checkbox-group v-model="form.games" placement="column">
+            <u-checkbox
+              :customStyle="{ marginBottom: '8px' }"
+              v-for="(item, index) in gameOptions"
+              :key="item.value"
+              :label="item.text"
+              :name="item.text"
+            >
+            </u-checkbox>
+          </u-checkbox-group>
+        </u-form-item>
+      </u--form> -->
+    </view>
+    <view class="footer">
+      <u-button
+        @click="confirm"
+        :custom-style="{ 'border-radius': '9px' }"
+        type="primary"
+      >
+        保存
+      </u-button>
     </view>
   </view>
 </template>
@@ -136,10 +158,21 @@ export default {
 
 <style scoped lang="scss">
 .calendar-setting {
-  padding: 40rpx;
+  padding: 30rpx;
+  background: white;
+  border-radius: 20rpx;
+  margin: 20rpx;
 }
 ::v-deep .uni-forms-item__content {
   display: flex;
   align-items: center;
+}
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: white;
+  padding: 30rpx;
+  box-sizing: border-box;
 }
 </style>
