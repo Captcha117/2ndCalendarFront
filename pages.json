@@ -3,10 +3,7 @@
     //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
     {
       "path": "pages/calendar/index",
-      "style": {
-        "navigationStyle": "custom",
-        "enablePullDownRefresh": true
-      }
+      "style": { "navigationStyle": "custom" }
     },
     {
       "path": "pages/calendar/settings",
@@ -36,7 +33,7 @@
     "selectedColor": "#5ec468",
     "borderStyle": "white",
     "backgroundColor": "#ffffff",
-    "height": "0",
+    "height": "0.1",
     "list": [
       {
         "pagePath": "pages/calendar/index",
