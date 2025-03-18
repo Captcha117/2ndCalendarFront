@@ -36,60 +36,66 @@
         <view>{{ getDay(i - 2) }}</view>
       </view>
     </view>
-    <view class="event">
-      <view class="img-list" v-if="showImg">
-        <view
-          v-for="(e, i) in showList"
-          class="img-item"
-          :key="e.id"
-          @click="clickEvent(e)"
-        >
-          <u-image
-            :src="e.imgUrl"
-            mode="aspectFill"
-            width="100%"
-            height="80rpx"
-          ></u-image>
+    <my-scroll-view
+      ref="scroll"
+      style="margin-top: 120rpx"
+      @onRefresh="refresh"
+    >
+      <view class="event">
+        <view class="img-list" v-if="showImg">
           <view
-            class="img-cover"
-            :style="{
-              background: `linear-gradient(to right, transparent, ${
-                colorMap[e.gameId]
-              })`,
-            }"
-          ></view>
-        </view>
-      </view>
-      <view class="event-list">
-        <view
-          v-for="(e, i) in showList"
-          class="event-row"
-          :key="e.id"
-          @click="clickEvent(e)"
-        >
-          <time-bar
-            :e="e"
-            :screenWidth="screenWidth"
-            :colorMap="colorMap"
-            :showImg="showImg"
-          ></time-bar>
-          <view class="event-text">
-            <view class="event-name">{{ e.name }}</view>
-            <event-reward :event="e"></event-reward>
+            v-for="(e, i) in showList"
+            class="img-item"
+            :key="e.id"
+            @click="clickEvent(e)"
+          >
+            <u-image
+              :src="e.imgUrl"
+              mode="aspectFill"
+              width="100%"
+              height="80rpx"
+            ></u-image>
+            <view
+              class="img-cover"
+              :style="{
+                background: `linear-gradient(to right, transparent, ${
+                  colorMap[e.gameId]
+                })`,
+              }"
+            ></view>
           </view>
-          <event-status
-            v-if="e.done || e.status != 1"
-            class="event-status"
-            :event="e"
-          ></event-status>
-          <event-remain v-else class="event-remain" :event="e"> </event-remain>
+        </view>
+        <view class="event-list">
+          <view
+            v-for="(e, i) in showList"
+            class="event-row"
+            :key="e.id"
+            @click="clickEvent(e)"
+          >
+            <time-bar
+              :e="e"
+              :screenWidth="screenWidth"
+              :colorMap="colorMap"
+              :showImg="showImg"
+            ></time-bar>
+            <view class="event-text">
+              <view class="event-name">{{ e.name }}</view>
+              <event-reward :event="e"></event-reward>
+            </view>
+            <event-status
+              v-if="e.done || e.status != 1"
+              class="event-status"
+              :event="e"
+            ></event-status>
+            <event-remain v-else class="event-remain" :event="e">
+            </event-remain>
+          </view>
         </view>
       </view>
-    </view>
-    <div style="margin-top: 120rpx">
-      <u-empty v-if="showList.length == 0" mode="data" :text="emptyText">
-      </u-empty>
-    </div>
+      <div v-if="showList.length == 0" style="margin-top: 120rpx">
+        <u-empty mode="data" :text="emptyText"> </u-empty>
+      </div>
+    </my-scroll-view>
     <u-popup :show="showDetail" @close="maskClick" round="10">
       <event-detail :event="currentEvent"></event-detail>
     </u-popup>
@@ -106,6 +112,7 @@ import EventRemain from "./components/event-remain.vue";
 import EventStatus from "./components/event-status.vue";
 import EventReward from "./components/event-reward.vue";
 import MyTabBar from "@/components/myTabBar/index.vue";
+import MyScrollView from "@/components/myScrollView/index.vue";
 import { mapGetters } from "vuex";
 import { getEventList, getEventDetailByPostId } from "./api";
 export default {
@@ -116,6 +123,7 @@ export default {
     EventStatus,
     EventReward,
     MyTabBar,
+    MyScrollView,
   },
   data() {
     return {
@@ -138,17 +146,12 @@ export default {
         this.screenWidth = rpx;
       },
     });
-    // uni.startPullDownRefresh();
-  },
-  onPullDownRefresh() {
-    this.refresh();
-    // uni.stopPullDownRefresh();
   },
   onShow() {
     let forceRefresh = uni.getStorageSync("refresh");
     if (forceRefresh) {
       uni.setStorageSync("refresh", false);
-      uni.startPullDownRefresh();
+      this.startPullDownRefresh();
     }
   },
   computed: {
@@ -211,10 +214,17 @@ export default {
   },
   mounted() {
     this.$store.dispatch("sys/getGameList").then((_) => {
-      this.refresh();
+      this.startPullDownRefresh();
     });
   },
   methods: {
+    startPullDownRefresh() {
+      this.$refs.scroll.onRefresh();
+    },
+    // 结束下拉刷新
+    stopPullDownRefresh() {
+      this.$refs.scroll.refreshFinish();
+    },
     // 刷新
     refresh() {
       if (this.loading) return;
@@ -238,12 +248,12 @@ export default {
           })
           .finally(() => {
             this.loading = false;
-            uni.stopPullDownRefresh();
+            this.stopPullDownRefresh();
           });
       } else {
         this.eventList = [];
         this.loading = false;
-        uni.stopPullDownRefresh();
+        this.stopPullDownRefresh();
       }
     },
     // 预处理数据
@@ -347,7 +357,6 @@ export default {
 }
 .event {
   display: flex;
-  margin-top: 120rpx;
 }
 .img-list {
   width: 160rpx;
