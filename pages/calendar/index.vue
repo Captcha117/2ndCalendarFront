@@ -10,9 +10,7 @@
       background-color="#F8F8F8"
       color="black"
       status-bar
-      left-icon="settings"
       title="活动日历"
-      @clickLeft="toSettings"
     />
     <view class="background" v-if="showList.length">
       <view class="blank" v-if="showImg"></view>
@@ -40,6 +38,9 @@
       ref="scroll"
       style="margin-top: 120rpx"
       @onRefresh="refresh"
+      :height="screenHeight - 100 - 120 - 88"
+      @upSlide="opacity = 0.2"
+      @downSlide="opacity = 1"
     >
       <view class="event">
         <view class="img-list" v-if="showImg">
@@ -99,6 +100,13 @@
     <u-popup :show="showDetail" @close="maskClick" round="10">
       <event-detail :event="currentEvent"></event-detail>
     </u-popup>
+    <view
+      class="tool-button"
+      :style="{ opacity: showList.length == 0 ? 1 : opacity }"
+      @click="toSettings"
+    >
+      <u-icon name="setting" color="white" size="24"></u-icon>
+    </view>
     <my-tab-bar :index="0" />
   </view>
 </template>
@@ -132,18 +140,22 @@ export default {
       firstDay: dayjs().add(-1, "day").startOf("day"),
       lastDay: dayjs().add(6, "day").startOf("day"),
       screenWidth: 0,
+      screenHeight: 0,
       eventList: [],
       days: ["日", "一", "二", "三", "四", "五", "六"],
       currentEvent: {},
 
       showDetail: false,
+      opacity: 1,
     };
   },
   onLoad() {
     uni.getSystemInfo({
       success: (res) => {
-        let rpx = res.screenWidth / (uni.upx2px(100) / 100);
-        this.screenWidth = rpx;
+        let rpxWidth = res.screenWidth / (uni.upx2px(100) / 100);
+        let rpxHeight = res.screenHeight / (uni.upx2px(100) / 100);
+        this.screenWidth = rpxWidth;
+        this.screenHeight = rpxHeight;
       },
     });
   },
@@ -238,6 +250,7 @@ export default {
       if (data.test) {
         this.eventList = data.eventList;
         this.handleData();
+        this.stopPullDownRefresh();
         return;
       }
       if (this.settings.games.length > 0) {
@@ -326,7 +339,7 @@ export default {
 }
 .week {
   position: fixed;
-  top: 44px + var(--status-bar-height);
+  top: calc(44px + var(--status-bar-height));
   width: 100%;
   display: flex;
   height: 120rpx;
@@ -413,5 +426,21 @@ export default {
 .event-status {
   z-index: 1;
   margin-right: 20rpx;
+}
+
+.tool-button {
+  position: fixed;
+  right: 20rpx;
+  bottom: 120rpx;
+  width: 88rpx;
+  height: 88rpx;
+  background: linear-gradient(315deg, #2f92fa 0%, #3ebafd 100%);
+  border-radius: 50%;
+  z-index: 2;
+  box-shadow: 2px 0px 8px 0px rgba(27, 37, 70, 0.08);
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>
