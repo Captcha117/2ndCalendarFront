@@ -3,7 +3,7 @@
     <view class="event-reward-item" v-for="r in event.rewardList">
       <reward-icon
         :name="r.rewardCode"
-        :size="size"
+        :size="size || '16'"
         style="margin-right: 2px"
       ></reward-icon>
       <text>{{ r.rewardNum }}</text>

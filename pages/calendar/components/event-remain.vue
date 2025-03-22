@@ -4,9 +4,9 @@
       name="clock"
       :color="color || statusColor || 'white'"
       size="12"
-      style="margin-right: 10rpx"
     ></u-icon>
     <count-down
+      style="margin-left: 10rpx"
       :time="getRemainTime()"
       :color="color || statusColor"
     ></count-down>
