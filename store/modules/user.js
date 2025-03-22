@@ -67,7 +67,8 @@ const actions = {
   getSettings({ commit }) {
     let settings = {};
     try {
-      settings = uni.getStorageSync("settings") || defaultSettings;
+      let s = uni.getStorageSync("settings");
+      settings = { ...defaultSettings, ...s };
     } catch (e) {
       settings = defaultSettings;
     }
