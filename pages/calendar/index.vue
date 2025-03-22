@@ -2,16 +2,16 @@
   <page-meta
     :page-style="'overflow:' + (showDetail ? 'hidden' : 'visible')"
   ></page-meta>
+  <uni-nav-bar
+    :fixed="true"
+    shadow
+    :border="false"
+    background-color="#F8F8F8"
+    color="black"
+    status-bar
+    title="活动日历"
+  />
   <view class="calendar-page">
-    <uni-nav-bar
-      :fixed="true"
-      shadow
-      :border="false"
-      background-color="#F8F8F8"
-      color="black"
-      status-bar
-      title="活动日历"
-    />
     <view class="background" v-if="showList.length">
       <view class="blank" v-if="showImg"></view>
       <view
@@ -36,9 +36,9 @@
     </view>
     <my-scroll-view
       ref="scroll"
-      style="margin-top: 120rpx"
+      style="position: relative; top: 120rpx"
       @onRefresh="refresh"
-      :height="screenHeight - 100 - 120 - 88"
+      :height="'100%'"
       @upSlide="opacity = 0.2"
       @downSlide="opacity = 1"
     >
@@ -152,8 +152,9 @@ export default {
   onLoad() {
     uni.getSystemInfo({
       success: (res) => {
-        let rpxWidth = res.screenWidth / (uni.upx2px(100) / 100);
-        let rpxHeight = res.screenHeight / (uni.upx2px(100) / 100);
+        console.log(res);
+        let rpxWidth = res.windowWidth / (uni.upx2px(100) / 100);
+        let rpxHeight = res.windowHeight / (uni.upx2px(100) / 100);
         this.screenWidth = rpxWidth;
         this.screenHeight = rpxHeight;
       },
@@ -174,7 +175,8 @@ export default {
     showList() {
       let { prop, order, status, done } = this.settings;
       let list = this.eventList.filter(
-        (x) => status.includes(x.status) && done.includes(x.done)
+        (x) =>
+          (status || []).includes(x.status) && (done || []).includes(x.done)
       );
       if (prop == "status") {
         list.sort((a, b) => {
@@ -214,7 +216,7 @@ export default {
     emptyText() {
       return this.settings?.games?.length > 0
         ? "暂无活动数据"
-        : "请在左上角设置中选择游戏";
+        : "请在设置中选择游戏";
     },
     colorMap() {
       let r = {};
@@ -328,6 +330,7 @@ export default {
 .calendar-page {
   /* display: flex;
   flex-direction: column; */
+  height: calc(100vh - var(--status-bar-height) - 44px - 120rpx - 50px);
 }
 .background {
   position: fixed;
@@ -339,7 +342,9 @@ export default {
 }
 .week {
   position: fixed;
+  /* #ifdef H5 */
   top: calc(44px + var(--status-bar-height));
+  /* #endif */
   width: 100%;
   display: flex;
   height: 120rpx;
@@ -430,8 +435,8 @@ export default {
 
 .tool-button {
   position: fixed;
-  right: 20rpx;
-  bottom: 120rpx;
+  right: 40rpx;
+  bottom: 140rpx;
   width: 88rpx;
   height: 88rpx;
   background: linear-gradient(315deg, #2f92fa 0%, #3ebafd 100%);

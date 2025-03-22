@@ -1,29 +1,27 @@
 <template>
-  <view>
-    <scroll-view
-      scroll-y="true"
-      style="height: calc(100vh - 136rpx)"
-      refresher-enabled="true"
-      :refresher-triggered="triggered"
-      :refresher-threshold="100"
-      refresher-background="#f5f7fa"
-      @refresherpulling="onPulling"
-      @refresherrefresh="onRefresh"
-      @refresherrestore="onRestore"
-      @refresherabort="onAbort"
-      @touchstart="touchStart"
-      @touchend="touchEnd"
-    >
-      <slot />
-    </scroll-view>
-  </view>
+  <scroll-view
+    scroll-y="true"
+    :style="{ height }"
+    refresher-enabled="true"
+    :refresher-triggered="triggered"
+    :refresher-threshold="100"
+    refresher-background="#f5f7fa"
+    @refresherpulling="onPulling"
+    @refresherrefresh="onRefresh"
+    @refresherrestore="onRestore"
+    @refresherabort="onAbort"
+    @touchstart="touchStart"
+    @touchend="touchEnd"
+  >
+    <slot />
+  </scroll-view>
 </template>
 <script>
 export default {
   props: {
     height: {
-      type: Number,
-      default: 100,
+      type: String,
+      default: "100px",
     },
   },
   data() {
