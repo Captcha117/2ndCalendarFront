@@ -152,7 +152,7 @@ export default {
   onLoad() {
     uni.getSystemInfo({
       success: (res) => {
-        console.log(res);
+        // console.log(res);
         let rpxWidth = res.windowWidth / (uni.upx2px(100) / 100);
         let rpxHeight = res.windowHeight / (uni.upx2px(100) / 100);
         this.screenWidth = rpxWidth;
@@ -166,6 +166,7 @@ export default {
       uni.setStorageSync("refresh", false);
       this.startPullDownRefresh();
     }
+    this.handleData();
   },
   computed: {
     ...mapGetters(["doneList", "settings", "gameList"]),
