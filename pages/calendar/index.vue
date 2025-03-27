@@ -16,7 +16,7 @@
       <view class="blank" v-if="showImg"></view>
       <view
         class="date"
-        v-for="i in 7"
+        v-for="i in weekArray"
         :key="i"
         :style="{ 'background-color': i == 2 ? '#eeeeee' : '#f5f7fa' }"
       >
@@ -26,7 +26,7 @@
       <view class="blank" v-if="showImg"></view>
       <view
         class="date"
-        v-for="i in 7"
+        v-for="i in weekArray"
         :key="-i"
         :style="{ 'background-color': i == 2 ? '#eeeeee' : 'white' }"
       >
@@ -37,7 +37,7 @@
     <my-scroll-view
       ref="scroll"
       style="position: relative; top: 120rpx"
-      @onRefresh="refresh"
+      @doRefresh="refresh"
       :height="'100%'"
       @upSlide="opacity = 0.2"
       @downSlide="opacity = 1"
@@ -91,6 +91,9 @@
             <event-remain v-else class="event-remain" :event="e">
             </event-remain>
           </view>
+          <!-- #ifdef MP-WEIXIN -->
+          <view class="event-row"></view>
+          <!-- #endif -->
         </view>
       </view>
       <div v-if="showList.length == 0" style="margin-top: 120rpx">
@@ -137,6 +140,7 @@ export default {
     return {
       loading: false,
 
+      weekArray: new Array(7).fill(1).map((x, i) => i + 1),
       firstDay: dayjs().add(-1, "day").startOf("day"),
       lastDay: dayjs().add(6, "day").startOf("day"),
       screenWidth: 0,

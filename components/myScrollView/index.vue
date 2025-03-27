@@ -27,12 +27,13 @@ export default {
   data() {
     return {
       triggered: false,
+      freshing: false,
       touchStartX: 0, // 触屏起始点x
       touchStartY: 0, // 触屏起始点y
     };
   },
   onLoad() {
-    // this._freshing = false;
+    // this.freshing = false;
     // setTimeout(() => {
     //   this.triggered = true;
     // }, 1000);
@@ -42,13 +43,18 @@ export default {
       // console.log("onpulling", e);
     },
     onRefresh() {
-      if (this._freshing) return;
-      this.triggered = true;
-      this._freshing = true;
-      this.$emit("onRefresh");
+      if (this.freshing) return;
+      this.freshing = true;
+      if (!this.triggered) {
+        this.triggered = true;
+      }
+      setTimeout(() => {
+        this.$emit("doRefresh");
+        // this.refreshFinish();
+      }, 100);
     },
     onRestore() {
-      this.triggered = "restore"; // 需要重置
+      // this.triggered = "restore"; // 需要重置
       // console.log("onRestore");
     },
     onAbort() {
@@ -56,7 +62,7 @@ export default {
     },
     refreshFinish() {
       this.triggered = false;
-      this._freshing = false;
+      this.freshing = false;
     },
     touchStart(e) {
       this.touchStartX = e.touches[0].clientX;
