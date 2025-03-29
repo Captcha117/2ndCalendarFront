@@ -1,9 +1,5 @@
 <template>
-  <view
-    class="event-status"
-    :class="event.done ? 'done' : 'undone'"
-    @click="changeStatus()"
-  >
+  <view class="event-status" :class="event.done ? 'done' : 'undone'">
     <template v-if="event.status === 0"> 未开始 </template>
     <template v-else-if="event.status === 1">
       <template v-if="event.done">
@@ -25,18 +21,10 @@ export default {
     event: Object,
     enabled: Boolean,
   },
-  methods: {
-    changeStatus() {
-      if (this.enabled && this.event.status === 1) {
-        if (this.event.done) {
-          this.$store.dispatch("user/removeDone", this.event.id);
-        } else {
-          this.$store.dispatch("user/addDone", this.event.id);
-        }
-        this.event.done = !this.event.done;
-      }
-    },
+  data() {
+    return {};
   },
+  methods: {},
 };
 </script>
 

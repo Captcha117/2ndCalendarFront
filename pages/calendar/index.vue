@@ -97,11 +97,14 @@
         </view>
       </view>
       <div v-if="showList.length == 0" style="margin-top: 120rpx">
-        <u-empty mode="data" :text="emptyText"> </u-empty>
+        <u-empty mode="search" :text="emptyText"> </u-empty>
       </div>
     </my-scroll-view>
     <u-popup :show="showDetail" @close="maskClick" round="10">
-      <event-detail :event="currentEvent"></event-detail>
+      <event-detail
+        :event="currentEvent"
+        @changeStatus="changeStatus"
+      ></event-detail>
     </u-popup>
     <view
       class="tool-button"
@@ -219,6 +222,9 @@ export default {
       return list;
     },
     emptyText() {
+      if (this.$refs.scroll?.triggered) {
+        return "加载中.....";
+      }
       return this.settings?.games?.length > 0
         ? "暂无活动数据"
         : "请在设置中选择游戏";
@@ -326,6 +332,17 @@ export default {
     },
     toSettings() {
       uni.navigateTo({ url: "settings" });
+    },
+    // 小程序兼容性写法，将 change 事件 emit 出来
+    changeStatus() {
+      if (this.currentEvent.status === 1) {
+        if (this.currentEvent.done) {
+          this.$store.dispatch("user/removeDone", this.currentEvent.id);
+        } else {
+          this.$store.dispatch("user/addDone", this.currentEvent.id);
+        }
+        this.currentEvent.done = !this.currentEvent.done;
+      }
     },
   },
 };

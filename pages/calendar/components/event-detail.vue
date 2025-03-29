@@ -25,7 +25,9 @@
       </view>
       <view class="event-execution">
         <event-reward :event="event" size="14"></event-reward>
-        <event-status :event="event" enabled></event-status>
+        <view @click="changeStatus()">
+          <event-status :event="event"></event-status>
+        </view>
       </view>
     </view>
     <view class="event-scroll">
@@ -70,6 +72,9 @@ export default {
       if (this.event.detailUrl) {
         openMihoyobbs(this.event.detailUrl, this.event.name);
       }
+    },
+    changeStatus() {
+      this.$emit("changeStatus");
     },
   },
 };
