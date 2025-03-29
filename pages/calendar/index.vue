@@ -100,7 +100,7 @@
         <u-empty mode="search" :text="emptyText"> </u-empty>
       </div>
     </my-scroll-view>
-    <u-popup :show="showDetail" @close="maskClick" round="10">
+    <u-popup v-if="showDetail" :show="showDetail" @close="maskClick" round="10">
       <event-detail
         :event="currentEvent"
         @changeStatus="changeStatus"
@@ -188,19 +188,33 @@ export default {
       );
       if (prop == "status") {
         list.sort((a, b) => {
-          // 已结束排最后
-          if (a.status == 2) {
-            return 1;
-          }
-          if (b.status == 2) {
+          // 定义每个状态的优先级
+          const priority = {
+            "1-false": 0, // 未完成进行中
+            "0-false": 1, // 未开始
+            "1-true": 2, // 已完成（进行中且完成）
+            "2-true": 2, // 已完成（已结束且完成）
+            "2-false": 3, // 已结束
+          };
+          // 根据status和done生成排序键
+          const keyA = `${a.status}-${a.done}`;
+          const keyB = `${b.status}-${b.done}`;
+
+          // 比较优先级
+          if (priority[keyA] < priority[keyB]) {
             return -1;
+          } else if (priority[keyA] > priority[keyB]) {
+            return 1;
+          } else {
+            // 如果优先级相同，则根据状态内部的排序规则排序
+            if (priority[keyA] === 1 && priority[keyB] === 1) {
+              // 未开始的按startTime排序
+              return new Date(a.startTime) - new Date(b.startTime);
+            } else {
+              // 其他状态按endTime排序
+              return new Date(a.endTime) - new Date(b.endTime);
+            }
           }
-          // 未结束中，已完成排最后
-          if (a.done !== b.done) {
-            return a.done - b.done;
-          }
-          // 否则按照结束时间排序
-          return new Date(a.endTime) - new Date(b.endTime);
         });
       } else if (prop == "game") {
         // 按游戏排序

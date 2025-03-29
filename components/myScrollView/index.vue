@@ -30,6 +30,10 @@ export default {
       freshing: false,
       touchStartX: 0, // 触屏起始点x
       touchStartY: 0, // 触屏起始点y
+      // timer: null,
+
+      // lastScrollTop: 0,
+      // scrollTop: 0,
     };
   },
   onLoad() {
@@ -63,6 +67,23 @@ export default {
     refreshFinish() {
       this.triggered = false;
       this.freshing = false;
+    },
+    scroll(e) {
+      // if (!this.timer) {
+      //   this.timer = setTimeout(() => {
+      //     let {
+      //       scrollLeft,
+      //       scrollTop,
+      //       scrollHeight,
+      //       scrollWidth,
+      //       deltaX,
+      //       deltaY,
+      //     } = e.detail;
+      //     this.lastScrollTop = this.scrollTop;
+      //     this.scrollTop = scrollTop;
+      //     this.timer = null;
+      //   }, 200);
+      // }
     },
     touchStart(e) {
       this.touchStartX = e.touches[0].clientX;

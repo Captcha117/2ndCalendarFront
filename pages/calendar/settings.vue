@@ -12,73 +12,94 @@
       @clickLeft="back"
     />
     <view class="calendar-setting">
-      <uni-forms ref="baseForm" :modelValue="form">
-        <uni-forms-item label="游戏">
-          <uni-data-checkbox
-            multiple
-            v-model="form.games"
-            :localdata="gameOptions"
-          ></uni-data-checkbox>
-        </uni-forms-item>
-
-        <uni-forms-item label="排序">
-          <uni-data-checkbox
-            v-model="form.prop"
-            wrap
-            :localdata="propOptions"
-          ></uni-data-checkbox>
-        </uni-forms-item>
-        <uni-forms-item label=" ">
-          <uni-data-checkbox
-            v-model="form.order"
-            :localdata="orderOptions"
-          ></uni-data-checkbox>
-        </uni-forms-item>
-        <uni-forms-item label="活动状态">
-          <uni-data-checkbox
-            multiple
-            v-model="form.status"
-            :localdata="statusOptions"
-          ></uni-data-checkbox>
-        </uni-forms-item>
-        <uni-forms-item label="完成状态">
-          <uni-data-checkbox
-            multiple
-            v-model="form.done"
-            :localdata="doneOptions"
-          ></uni-data-checkbox>
-        </uni-forms-item>
-        <uni-forms-item label="图片">
-          <uni-data-checkbox
-            v-model="form.showImg"
-            wrap
-            :localdata="showImgOptions"
-          ></uni-data-checkbox>
-        </uni-forms-item>
-      </uni-forms>
-
-      <!-- <u--form labelPosition="left" :model="form" ref="uForm">
-        <u-form-item label="游戏" prop="prop" borderBottom>
+      <u--form labelPosition="left" :model="form" ref="uForm">
+        <u-form-item label="游戏" prop="games" borderBottom>
           <u-checkbox-group v-model="form.games" placement="column">
             <u-checkbox
-              :customStyle="{ marginBottom: '8px' }"
+              :customStyle="{ marginBottom: '16rpx' }"
               v-for="(item, index) in gameOptions"
               :key="item.value"
               :label="item.text"
-              :name="item.text"
+              :name="item.value"
             >
             </u-checkbox>
           </u-checkbox-group>
         </u-form-item>
-      </u--form> -->
+        <u-form-item label="排序" prop="prop">
+          <u-radio-group v-model="form.prop" placement="column">
+            <u-radio label="按状态" name="status"> </u-radio>
+            <view class="tip">进行中 > 未开始 > 已完成 > 已结束</view>
+            <u-radio
+              :customStyle="{ marginBottom: '16rpx' }"
+              v-for="(item, index) in propOptions"
+              :key="item.value"
+              :label="item.text"
+              :name="item.value"
+            >
+            </u-radio>
+          </u-radio-group>
+        </u-form-item>
+        <u-form-item label=" " prop="order" borderBottom>
+          <u-radio-group v-model="form.order" placement="row">
+            <u-radio
+              :customStyle="{ marginRight: '16px' }"
+              v-for="(item, index) in orderOptions"
+              :key="item.value"
+              :label="item.text"
+              :name="item.value"
+            >
+            </u-radio>
+          </u-radio-group>
+        </u-form-item>
+        <u-form-item label="活动状态" prop="status" borderBottom>
+          <u-checkbox-group v-model="form.status" placement="row">
+            <u-checkbox
+              :customStyle="{ marginRight: '16px' }"
+              v-for="(item, index) in statusOptions"
+              :key="item.value"
+              :label="item.text"
+              :name="item.value"
+            >
+            </u-checkbox>
+          </u-checkbox-group>
+        </u-form-item>
+        <u-form-item label="完成状态" prop="done" borderBottom>
+          <u-checkbox-group v-model="form.done" placement="row">
+            <u-checkbox
+              :customStyle="{ marginRight: '16px' }"
+              v-for="(item, index) in doneOptions"
+              :key="item.value"
+              :label="item.text"
+              :name="item.value"
+            >
+            </u-checkbox>
+          </u-checkbox-group>
+        </u-form-item>
+        <u-form-item label="图片" prop="showImg">
+          <u-radio-group v-model="form.showImg" placement="row">
+            <u-radio
+              :customStyle="{ marginRight: '16px' }"
+              v-for="(item, index) in showImgOptions"
+              :key="item.value"
+              :label="item.text"
+              :name="item.value"
+            >
+            </u-radio>
+          </u-radio-group>
+        </u-form-item>
+      </u--form>
+      <div style="height: 140rpx"></div>
     </view>
     <view class="footer">
+      <u-button @click="back" :custom-style="{ 'border-radius': '9px' }">
+        取消
+      </u-button>
       <u-button
         @click="confirm"
-        :custom-style="{ 'border-radius': '9px' }"
+        :custom-style="{ 'border-radius': '9px', 'margin-left': '16rpx' }"
         type="primary"
       >
-        保存
+        确定
       </u-button>
     </view>
   </view>
@@ -91,7 +112,7 @@ export default {
     return {
       form: {},
       propOptions: [
-        { text: "按状态", value: "status" },
+        // { text: "按状态", value: "status" },
         { text: "按游戏", value: "game" },
         { text: "按开始时间", value: "startTime" },
         { text: "按结束时间", value: "endTime" },
@@ -129,6 +150,7 @@ export default {
     },
   },
   mounted() {
+    this.$store.dispatch("user/getSettings");
     this.form = { ...this.settings };
     // if (this.form?.games?.length == 0) {
     //   this.form.games = this.gameList.map((x) => x.id);
@@ -136,7 +158,8 @@ export default {
   },
   methods: {
     back() {
-      uni.navigateBack({ delta: 1 });
+      // uni.navigateBack({ delta: 1 });
+      uni.switchTab({ url: "/pages/calendar/index" });
     },
     confirm() {
       // if (this.form.games.length == 0) {
@@ -167,6 +190,12 @@ export default {
   display: flex;
   align-items: center;
 }
+.tip {
+  font-size: 24rpx;
+  color: #898989;
+  margin-bottom: 16rpx;
+  margin-left: 48rpx;
+}
 .footer {
   position: fixed;
   bottom: 0;
@@ -174,5 +203,6 @@ export default {
   background-color: white;
   padding: 30rpx;
   box-sizing: border-box;
+  display: flex;
 }
 </style>
