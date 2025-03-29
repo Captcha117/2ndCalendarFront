@@ -2,7 +2,7 @@
   "name": "2ndCalendar",
   "appid": "__UNI__C01520A",
   "description": "",
-  "versionName": "0.2.0",
+  "versionName": "0.5.0",
   "versionCode": "100",
   "transformPx": false,
   /* 5+App特有相关 */
@@ -98,9 +98,10 @@
   "quickapp": {},
   /* 小程序特有相关 */
   "mp-weixin": {
-    "appid": "",
+    "appid": "wx65542cfabbf1817e",
     "setting": {
-      "urlCheck": false
+      "urlCheck": false,
+      "minified": true
     },
     "usingComponents": true
   },
