@@ -38,6 +38,7 @@ export default {
           // #ifdef APP-PLUS
           { label: "版本号", value: this.version },
           // #endif
+          { label: "账号", path: "/pages/my/account/index" },
           { label: "更新日志", path: "/pages/my/log/index" },
         ];
         return menu;
