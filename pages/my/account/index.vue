@@ -11,73 +11,128 @@
       left-icon="left"
       @clickLeft="back"
     />
-    <u-button
-      @click="login"
-      :custom-style="{ 'border-radius': '9px' }"
-      type="primary"
-    >
-      登录
-    </u-button>
-    <u-modal :content="content" :show="show" @confirm="confirm"> </u-modal>
-    <u-toast ref="uToast"></u-toast>
+    <view class="u-page">
+      <view class="u-demo-block__content">
+        <!-- 注意，如果需要兼容微信小程序，最好通过setRules方法设置rules规则 -->
+        <u--form labelPosition="left" :model="userInfo" ref="form">
+          <u-form-item
+            label="用户名"
+            prop="name"
+            borderBottom
+            ref="item1"
+            labelWidth="80"
+          >
+            <u--input v-model="userInfo.name" border="none"></u--input>
+          </u-form-item>
+          <u-form-item
+            label="性别"
+            prop="sex"
+            borderBottom
+            @click="
+              showSex = true;
+              hideKeyboard();
+            "
+            ref="item1"
+            labelWidth="80"
+          >
+            <u--input
+              v-model="userInfo.sex"
+              disabled
+              disabledColor="#ffffff"
+              placeholder="请选择性别"
+              border="none"
+            ></u--input>
+            <u-icon slot="right" name="arrow-right"></u-icon>
+          </u-form-item>
+          <u-form-item
+            label="手机号"
+            prop="mobile"
+            labelWidth="80"
+            borderBottom
+          >
+            <u--input
+              v-model="userInfo.mobile"
+              border="none"
+              placeholder="请填写手机号"
+            ></u--input>
+          </u-form-item>
+          <u-form-item label="邮箱" prop="email" labelWidth="80" borderBottom>
+            <u--input
+              v-model="userInfo.email"
+              border="none"
+              placeholder="请填写邮箱"
+            ></u--input>
+          </u-form-item>
+        </u--form>
+        <u-button
+          type="primary"
+          text="提交"
+          customStyle="margin-top: 50px"
+          @click="submit"
+        ></u-button>
+        <u-action-sheet
+          :show="showSex"
+          :actions="actions"
+          title="请选择性别"
+          @close="showSex = false"
+          @select="sexSelect"
+        >
+        </u-action-sheet>
+      </view>
+    </view>
   </view>
 </template>
 
 <script>
-import * as api from "./api";
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      show: false,
-      content: "",
+      fileList1: [],
+      disabled1: false,
+      tips: "",
+      value: "",
+      showCalendar: false,
+      showBirthday: false,
+      userInfo: {
+        username: "",
+        sex: "",
+        mobile: "",
+        email: "",
+      },
+      showSex: false,
+      actions: [{ name: "男" }, { name: "女" }, { name: "保密" }],
+      rules: {},
     };
   },
+  computed: {
+    ...mapGetters(["user"]),
+  },
+  onReady() {
+    // 如果需要兼容微信小程序，并且校验规则中含有方法等，只能通过setRules方法设置规则
+    this.$refs.form.setRules(this.rules);
+  },
+  mounted() {
+    this.userInfo = JSON.parse(JSON.stringify(this.user));
+  },
   methods: {
-    login() {
-      uni.login({
-        provider: "weixin", //使用微信登录
-        success: (loginRes) => {
-          console.log(loginRes);
-          console.log(loginRes.authResult);
-          api.login(loginRes.code).then((_) => {
-            this.show = true;
-          });
-        },
-      });
+    sexSelect(e) {
+      this.userInfo.sex = e.name;
+      this.$refs.form.validateField("userInfo.sex");
     },
-    confirm() {
-      if (uni.getUserProfile) {
-        uni.getUserProfile({
-          // 显示用户信息的语言
-          lang: "zh_CN",
-          // 声明获取用户个人信息后的用途，不超过30个字符
-          desc: "用来授权登录该小程序!",
-          // 接口调用成功回调函数
-          success: (userInfo) => {
-            console.log(userInfo);
-            this.content = JSON.stringify(userInfo);
-            // this.$refs.uToast.show({
-            //   type: "default",
-            //   title: "默认主题",
-            //   message: JSON.stringify(userInfo),
-            // });
-
-            // 成功的回调里自带一个参数, 这个参数就是用户信息对象(userInfo)。其属性为:
-            // rawDate: String,不包括敏感信息的原始数据字符串,用于计算签名;
-            // signature: String, 使用 sha1(rawData + sessionkey) 得到字符串用于校验用户信息;
-            // encryptedData: String, 包括敏感信息在内的加密数据详细见加密数据解密算法;
-            // iv: String, 加密算法的初始向量,相见加密数据机密算法;
-            // cloudID: String, 敏感数据对应的云 ID, 开通云开发的小程序才会返回,可通过云调用直接获取开放数据,详见云开发直接获取开放数据;
-            // errMsg: String, 错误的描述
-          },
-          // 接口调用失败回调函数
-          fail: (e) => {
-            console.log(e);
-          },
-          // 接口调用完成回调函数
-          complete: () => {},
+    submit() {
+      // 如果有错误，会在catch中返回报错信息数组，校验通过则在then中返回true
+      this.$refs.form
+        .validate()
+        .then((res) => {
+          uni.$u.toast("校验通过");
+        })
+        .catch((errors) => {
+          uni.$u.toast("校验失败");
         });
-      }
+    },
+    hideKeyboard() {
+      uni.hideKeyboard();
     },
     back() {
       uni.navigateBack({ delta: 1 });
@@ -86,4 +141,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+.u-page {
+  padding: 15px 15px 40px 15px;
+}
+</style>

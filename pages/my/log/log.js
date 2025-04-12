@@ -1,4 +1,4 @@
-export const str = `
+export const logStr = `
 ### v0.4 (2025.3.22)
 
 #### 活动日历

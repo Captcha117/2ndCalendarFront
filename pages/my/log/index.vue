@@ -7,7 +7,7 @@
       background-color="#F8F8F8"
       color="black"
       status-bar
-      title="更新日志"
+      :title="title"
       left-icon="left"
       @clickLeft="back"
     />
@@ -16,12 +16,38 @@
 </template>
 
 <script>
-import { str } from "./log";
+import { logStr } from "./log";
+import { termStr } from "./term";
+import { privacyStr } from "./privacy";
 export default {
   data() {
     return {
-      text: str,
+      type: "",
+      title: "",
+      text: "",
     };
+  },
+  onLoad(option) {
+    this.type = option.type || "";
+  },
+  mounted() {
+    switch (this.type) {
+      case "log": {
+        this.title = "更新日志";
+        this.text = logStr;
+        break;
+      }
+      case "term": {
+        this.title = "服务条款";
+        this.text = termStr;
+        break;
+      }
+      case "privacy": {
+        this.title = "隐私协议";
+        this.text = privacyStr;
+        break;
+      }
+    }
   },
   methods: {
     back() {

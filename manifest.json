@@ -98,9 +98,10 @@
   "quickapp": {},
   /* 小程序特有相关 */
   "mp-weixin": {
-    "appid": "",
+    "appid": "wx65542cfabbf1817e",
     "setting": {
-      "urlCheck": false
+      "urlCheck": false,
+      "minified": true
     },
     "usingComponents": true
   },
@@ -130,7 +131,9 @@
           }
         }
       }
-    }
+    },
+    "title": "卡普茶"
   },
-  "vueVersion": "2"
+  "vueVersion": "2",
+  "locale": "zh-Hans"
 }
