@@ -13,6 +13,24 @@
     <my-tab-bar :index="1" />
     <u-popup :show="showLogin" @close="showLogin = false" round="10">
       <view class="popup-content" :style="{ height: height * 0.4 + 'px' }">
+        <view class="logo-view">
+          <u--image
+            src="/static/micro.svg"
+            width="100rpx"
+            height="100rpx"
+          ></u--image>
+          <uni-icons
+            type="more-filled"
+            size="30"
+            style="margin: 0 30rpx"
+          ></uni-icons>
+          <u--image
+            src="/static/logo.png"
+            width="100rpx"
+            height="100rpx"
+          ></u--image>
+        </view>
+
         <view class="privacy" @click="checked = !checked">
           <u-icon
             name="checkmark-circle-fill"
@@ -23,16 +41,13 @@
           <text style="margin-left: 8rpx">
             我已阅读并同意<text class="link" @click.stop="toTerm('term')"
               >《服务条款》</text
-            >和<text class="link" @click.stop="toTerm('privacy')">《隐私协议》</text>
+            >和<text class="link" @click.stop="toTerm('privacy')"
+              >《隐私协议》</text
+            >
           </text>
         </view>
 
-        <u-button
-          type="primary"
-          text="登录"
-          customStyle="margin-top: 50px"
-          @click="login"
-        ></u-button>
+        <u-button type="primary" text="登录" @click="login"></u-button>
       </view>
     </u-popup>
   </view>
@@ -74,12 +89,10 @@ export default {
           {
             label: this.user.id ? this.user.name : "登录 / 注册",
             command: "account",
+            hideArrow: !!this.user.id,
             // path: "/pages/my/account/index",
           },
-          { label: "更新日志", path: "/pages/my/log/index?type=log" },
-          // #ifdef APP-PLUS
-          { label: "版本号", value: this.version },
-          // #endif
+          { label: "关于", path: "/pages/my/about/index" },
         ];
         return menu;
       }
@@ -100,9 +113,6 @@ export default {
         }
       }
     },
-    toTerm(type) {
-      uni.navigateTo({ url: "/pages/my/log/index?type=" + type });
-    },
     login() {
       if (!this.checked) {
         uni.showToast({
@@ -111,11 +121,12 @@ export default {
         });
         return;
       }
+
+      uni.showLoading({ title: "Loading", mask: true });
       // 获取一次性登录code
       uni.login({
         provider: "weixin", // 使用微信登录
         success: (loginRes) => {
-          uni.showLoading({ title: "Loading", mask: true });
           this.$store
             .dispatch("user/wxLogin", loginRes.code)
             .then((_) => {
@@ -135,6 +146,9 @@ export default {
             .catch(() => {
               uni.hideLoading();
             });
+        },
+        fail: () => {
+          uni.hideLoading();
         },
       });
     },
@@ -156,8 +170,14 @@ export default {
   font-size: 28rpx;
   display: flex;
   text-align: center;
+  margin: 50px 0 20rpx;
 }
 .link {
   color: #3c9cff;
+}
+.logo-view {
+  display: flex;
+  text-align: center;
+  justify-content: center;
 }
 </style>

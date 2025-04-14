@@ -43,7 +43,7 @@
             <text class="item-value">{{ item.value }}</text>
             <uni-icons
               style="margin-left: 16rpx"
-              v-if="item.path || item.command"
+              v-if="(item.path || item.command) && !item.hideArrow"
               type="forward"
               size="16"
               :color="arrowColor"
