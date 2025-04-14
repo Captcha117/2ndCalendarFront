@@ -20,6 +20,7 @@
     { "path": "pages/my/index", "style": { "navigationStyle": "custom" } },
     { "path": "pages/my/log/index", "style": { "navigationStyle": "custom" } },
     { "path": "pages/my/account/index", "style": { "navigationStyle": "custom" } },
+    { "path": "pages/my/about/index", "style": { "navigationStyle": "custom" } },
     { "path": "pages/webview/index" }
   ],
   "globalStyle": {
