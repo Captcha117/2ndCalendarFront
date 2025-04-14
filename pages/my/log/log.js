@@ -1,4 +1,4 @@
-export const str = `
+export const logStr = `
 ### v0.5 (2025.3.29)
 
 #### 系统

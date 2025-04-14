@@ -19,11 +19,12 @@
     },
     { "path": "pages/my/index", "style": { "navigationStyle": "custom" } },
     { "path": "pages/my/log/index", "style": { "navigationStyle": "custom" } },
+    { "path": "pages/my/account/index", "style": { "navigationStyle": "custom" } },
     { "path": "pages/webview/index" }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "2ndCalendar",
+    "navigationBarTitleText": "卡普茶",
     "navigationBarBackgroundColor": "#F8F8F8",
     "backgroundColor": "#F8F8F8"
   },

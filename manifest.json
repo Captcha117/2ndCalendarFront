@@ -131,7 +131,9 @@
           }
         }
       }
-    }
+    },
+    "title": "卡普茶"
   },
-  "vueVersion": "2"
+  "vueVersion": "2",
+  "locale": "zh-Hans"
 }
