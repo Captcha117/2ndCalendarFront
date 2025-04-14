@@ -69,9 +69,12 @@ export default {
   },
   methods: {
     toDetailUrl() {
-      if (this.event.detailUrl) {
-        openMihoyobbs(this.event.detailUrl, this.event.name);
-      }
+      // if (this.event.detailUrl) {
+      //   openMihoyobbs(this.event.detailUrl, this.event.name);
+      // }
+      uni.navigateTo({
+        url: `/pages/webview/index?title=${this.event.name}&src=${this.event.detailUrl}`,
+      });
     },
     changeStatus() {
       this.$emit("changeStatus");
