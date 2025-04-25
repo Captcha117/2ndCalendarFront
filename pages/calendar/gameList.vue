@@ -1,5 +1,5 @@
 <template>
-  <view class="u-page">
+  <view>
     <uni-nav-bar
       :fixed="true"
       shadow
@@ -11,40 +11,30 @@
       left-icon="left"
       @clickLeft="back"
     />
-    <!-- <u-list>
-      <u-list-item v-for="(item, index) in list" :key="index">
-        <u-cell :title="item.name">
-          <u-avatar
-            slot="icon"
-            shape="square"
-            size="35"
-            :src="item.url"
-            customStyle="margin: -3px 5px -3px 0"
-          ></u-avatar>
-          <u-switch v-model="checked"></u-switch>
 
+    <u-checkbox-group v-model="checkList" placement="column">
+      <view v-for="(item, index) in list" :key="index">
+        <u-cell :title="item.name" @click="clickGame(item)">
+          <image slot="icon" :src="item.icon" class="game-image"></image>
+          <template slot="value">
+            <!-- <u-icon name="minus-circle" color="#2979ff" size="18"></u-icon> -->
+            <u-checkbox :key="index" :name="item.id"> </u-checkbox>
+          </template>
         </u-cell>
-      </u-list-item>
-    </u-list> -->
-    <u-index-list :index-list="indexList">
-      <template v-for="(item, i) in itemArr">
-        <u-index-item>
-          <u-index-anchor :text="indexList[i]"></u-index-anchor>
-          <view class="list-cell" v-for="(cell, j) in item">
-            <view class="list-cell-left">
-              <u-avatar
-                shape="square"
-                size="35"
-                :src="cell.url"
-                customStyle="margin: -3px 5px -3px 0"
-              ></u-avatar>
-              {{ cell }}
-            </view>
-            <u-icon name="checkmark-circle-fill"></u-icon>
-          </view>
-        </u-index-item>
-      </template>
-    </u-index-list>
+      </view>
+    </u-checkbox-group>
+    <view class="footer">
+      <u-button @click="back" :custom-style="{ 'border-radius': '9px' }">
+        取消
+      </u-button>
+      <u-button
+        @click="confirm"
+        :custom-style="{ 'border-radius': '9px', 'margin-left': '16rpx' }"
+        type="primary"
+      >
+        确定
+      </u-button>
+    </view>
   </view>
 </template>
 
@@ -53,17 +43,8 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      checked: true,
+      checkList: [],
       list: [],
-      indexList: ["A", "B", "C", "d", "e"],
-      itemArr: [
-        ["列表A1", "列表A2", "列表A3"],
-        ["列表B1", "列表B2", "列表B3"],
-        ["列表C1", "列表C2", "列表C3"],
-        ["列表C1", "列表C2", "列表C3"],
-        ["列表C1", "列表C2", "列表C3"],
-        ["列表C1", "列表C2", "列表C3"],
-      ],
     };
   },
   computed: {
@@ -71,29 +52,45 @@ export default {
   },
   mounted() {
     this.list = [...this.gameList];
+    this.checkList = this.settings?.games || [];
   },
   methods: {
     back() {
-      uni.navigateBack({ delta: 1 });
+      // uni.navigateBack({ delta: 1 });
+      uni.switchTab({ url: "/pages/calendar/index" });
+    },
+    clickGame(item) {
+      let index = this.checkList.indexOf(item.id);
+      if (index >= 0) {
+        this.checkList.splice(index, 1);
+      } else {
+        this.checkList.push(item.id);
+      }
+    },
+    confirm() {
+      let settings = { ...this.settings, games: this.checkList };
+      this.$store.dispatch("user/setSettings", settings);
+      uni.setStorageSync("refresh", true);
+      this.back();
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.list-cell {
-  display: flex;
-  box-sizing: border-box;
-  width: 100%;
-  padding: 20rpx 60rpx 20rpx 24rpx;
-  overflow: hidden;
-  color: #323233;
-  font-size: 14px;
-  line-height: 24px;
-  background-color: #fff;
-  justify-content: space-between;
+.game-image {
+  border-radius: 10rpx;
+  height: 70rpx;
+  width: 70rpx;
+  margin-right: 10rpx;
 }
-.list-cell-left {
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: white;
+  padding: 30rpx;
+  box-sizing: border-box;
   display: flex;
 }
 </style>

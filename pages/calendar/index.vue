@@ -60,7 +60,7 @@
               class="img-cover"
               :style="{
                 background: `linear-gradient(to right, transparent, ${
-                  colorMap[e.gameId]
+                  colorMap[e['gameId']]
                 })`,
               }"
             ></view>
@@ -107,7 +107,14 @@
       ></event-detail>
     </u-popup>
     <view
-      class="tool-button"
+      class="corner-button game-button"
+      :style="{ opacity: showList.length == 0 ? 1 : opacity }"
+      @click="toGameList"
+    >
+      <u--image src="/static/game.svg" width="24px" height="24px"></u--image>
+    </view>
+    <view
+      class="corner-button tool-button"
       :style="{ opacity: showList.length == 0 ? 1 : opacity }"
       @click="toSettings"
     >
@@ -159,7 +166,7 @@ export default {
   onLoad() {
     uni.getSystemInfo({
       success: (res) => {
-        // console.log(res);
+        console.log(res);
         let rpxWidth = res.windowWidth / (uni.upx2px(100) / 100);
         let rpxHeight = res.windowHeight / (uni.upx2px(100) / 100);
         this.screenWidth = rpxWidth;
@@ -344,6 +351,9 @@ export default {
         this.$set(e, "status", 2); // 已结束
       }
     },
+    toGameList() {
+      uni.navigateTo({ url: "gameList" });
+    },
     toSettings() {
       uni.navigateTo({ url: "settings" });
     },
@@ -469,10 +479,9 @@ export default {
   margin-right: 20rpx;
 }
 
-.tool-button {
+.corner-button {
   position: fixed;
   right: 40rpx;
-  bottom: 140rpx;
   width: 88rpx;
   height: 88rpx;
   background: linear-gradient(315deg, #2f92fa 0%, #3ebafd 100%);
@@ -483,5 +492,11 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  &.tool-button {
+    bottom: 140rpx;
+  }
+  &.game-button {
+    bottom: 240rpx;
+  }
 }
 </style>

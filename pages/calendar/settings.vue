@@ -14,7 +14,11 @@
     <view class="calendar-setting">
       <u--form labelPosition="left" :model="form" ref="uForm">
         <u-form-item label="游戏" prop="games" borderBottom>
-          <u-checkbox-group v-model="form.games" placement="column">
+          <view class="flex" @click="toGameList">
+            {{ form.games ? `已选择${form.games.length}个游戏` : "" }}
+            <u-icon name="arrow-right"></u-icon>
+          </view>
+          <!-- <u-checkbox-group v-model="form.games" placement="column">
             <u-checkbox
               :customStyle="{ marginBottom: '16rpx' }"
               v-for="(item, index) in gameOptions"
@@ -23,7 +27,7 @@
               :name="item.value"
             >
             </u-checkbox>
-          </u-checkbox-group>
+          </u-checkbox-group> -->
         </u-form-item>
         <u-form-item label="排序" prop="prop">
           <u-radio-group v-model="form.prop" placement="column">
@@ -175,6 +179,9 @@ export default {
       uni.setStorageSync("refresh", true);
       this.back();
     },
+    toGameList() {
+      uni.navigateTo({ url: "gameList" });
+    },
   },
 };
 </script>
@@ -187,6 +194,10 @@ export default {
   margin: 20rpx;
 }
 ::v-deep .uni-forms-item__content {
+  display: flex;
+  align-items: center;
+}
+.flex {
   display: flex;
   align-items: center;
 }
