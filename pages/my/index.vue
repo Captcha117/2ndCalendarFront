@@ -113,6 +113,9 @@ export default {
         }
       }
     },
+    toTerm(type) {
+      uni.navigateTo({ url: "/pages/my/log/index?type=" + type });
+    },
     login() {
       if (!this.checked) {
         uni.showToast({
@@ -170,14 +173,14 @@ export default {
   font-size: 28rpx;
   display: flex;
   text-align: center;
-  margin: 50px 0 20rpx;
+  margin: 50px 0 30rpx;
 }
 .link {
   color: #3c9cff;
 }
 .logo-view {
   display: flex;
-  text-align: center;
+  align-items: center;
   justify-content: center;
 }
 </style>

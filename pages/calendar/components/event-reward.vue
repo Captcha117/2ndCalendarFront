@@ -25,6 +25,6 @@ export default {
 .event-reward-item {
   display: inline-flex;
   align-items: center;
-  margin-right: 20px;
+  margin-right: 20rpx;
 }
 </style>

@@ -5,12 +5,12 @@
         <view class="event-name" @click="toDetailUrl">
           <view>{{ event.name }}</view>
           <!-- <u-icon v-if="event.detailUrl" name="arrow-right" size="14"></u-icon> -->
-          <uni-icons
+          <!-- <uni-icons
             v-if="event.detailUrl"
             type="right"
             size="14"
             style="position: relative; top: 1px"
-          ></uni-icons>
+          ></uni-icons> -->
         </view>
         <u-tag
           v-if="event.categoryName"
@@ -72,9 +72,9 @@ export default {
       // if (this.event.detailUrl) {
       //   openMihoyobbs(this.event.detailUrl, this.event.name);
       // }
-      uni.navigateTo({
-        url: `/pages/webview/index?title=${this.event.name}&src=${this.event.detailUrl}`,
-      });
+      // uni.navigateTo({
+      //   url: `/pages/webview/index?title=${this.event.name}&src=${this.event.detailUrl}`,
+      // });
     },
     changeStatus() {
       this.$emit("changeStatus");
