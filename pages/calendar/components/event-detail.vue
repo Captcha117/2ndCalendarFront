@@ -31,7 +31,12 @@
       </view>
     </view>
     <view class="event-scroll">
-      <image class="event-image" :src="event.imgUrl" mode="widthFix"></image>
+      <image
+        v-for="img in event.imgUrlList"
+        class="event-image"
+        :src="img"
+        mode="widthFix"
+      ></image>
       <view class="event-desc">{{ event.description }}</view>
     </view>
   </view>
@@ -120,7 +125,7 @@ export default {
 
 .event-image {
   width: 100%;
-  margin: 20rpx 0;
+  margin-bottom: 20rpx;
   border-radius: 10rpx;
 }
 .event-desc {

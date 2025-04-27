@@ -51,7 +51,7 @@
             @click="clickEvent(e)"
           >
             <u-image
-              :src="e.imgUrl"
+              :src="e.imgUrlList[0] || ''"
               mode="aspectFill"
               width="100%"
               height="80rpx"
@@ -317,6 +317,7 @@ export default {
           Math.min(+new Date(this.lastDay), +new Date(e.endTime))
         );
         this.$set(e, "done", this.doneList.includes(e.id));
+        this.$set(e, "imgUrlList", (e.imgUrl || "").split(";"));
         this.getEventStatus(e);
       });
     },
