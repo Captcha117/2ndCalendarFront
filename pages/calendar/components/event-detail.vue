@@ -1,5 +1,5 @@
 <template>
-  <view class="popup-content" :style="{ height: height * 0.6 + 'px' }">
+  <view class="popup-content" :style="{ height: height * 0.5 + 'px' }">
     <view class="event-basic">
       <view class="event-header">
         <view class="event-name" @click="toDetailUrl">

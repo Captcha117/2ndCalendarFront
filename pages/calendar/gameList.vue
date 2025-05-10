@@ -24,8 +24,17 @@
       </view>
     </u-checkbox-group>
     <view class="footer">
-      <u-button @click="back" :custom-style="{ 'border-radius': '9px' }">
+      <!-- <u-button @click="back" :custom-style="{ 'border-radius': '9px' }">
         取消
+      </u-button> -->
+      <u-button @click="selectAll" :custom-style="{ 'border-radius': '9px' }">
+        全选
+      </u-button>
+      <u-button @click="deselectAll" :custom-style="{ 'border-radius': '9px' }">
+        全不选
+      </u-button>
+      <u-button @click="invert" :custom-style="{ 'border-radius': '9px' }">
+        反选
       </u-button>
       <u-button
         @click="confirm"
@@ -67,6 +76,16 @@ export default {
         this.checkList.push(item.id);
       }
     },
+    selectAll() {
+      this.checkList = this.list.map((x) => x.id);
+    },
+    deselectAll() {
+      this.checkList = [];
+    },
+    invert() {
+      let idList = this.list.map((x) => x.id);
+      this.checkList = idList.filter((x) => !this.checkList.includes(x));
+    },
     confirm() {
       let settings = { ...this.settings, games: this.checkList };
       this.$store.dispatch("user/setSettings", settings);
@@ -92,5 +111,8 @@ export default {
   padding: 30rpx;
   box-sizing: border-box;
   display: flex;
+}
+.u-button + .u-button {
+  margin-left: 16rpx;
 }
 </style>

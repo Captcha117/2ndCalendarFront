@@ -92,8 +92,8 @@
           </u-radio-group>
         </u-form-item>
       </u--form>
-      <div style="height: 140rpx"></div>
     </view>
+    <div style="height: 140rpx"></div>
     <view class="footer">
       <u-button @click="back" :custom-style="{ 'border-radius': '9px' }">
         取消
