@@ -98,26 +98,33 @@ const http = {
     }
 
     if (response.statusCode === 200) {
-      if (data.code === 401) {
-        // if (this.jumpLoginFlag) {
-        //   return reject();
-        // }
-        // this.jumpLoginFlag = true;
-        store.dispatch("user/resetState").then((_) => {
-          setTimeout(() => {
-            if (!whiteListRoutes.includes(router.currentRoute.name)) {
-              router.$lockStatus = false;
-              router.replaceAll({
-                name: "login",
-              });
-            }
-            // this.jumpLoginFlag = false;
-          }, 1500);
-          reject();
-        });
-        return;
-      } else {
+      // if (data.code === 401) {
+      //   // if (this.jumpLoginFlag) {
+      //   //   return reject();
+      //   // }
+      //   // this.jumpLoginFlag = true;
+      //   store.dispatch("user/resetState").then((_) => {
+      //     setTimeout(() => {
+      //       if (!whiteListRoutes.includes(router.currentRoute.name)) {
+      //         router.$lockStatus = false;
+      //         router.replaceAll({
+      //           name: "login",
+      //         });
+      //       }
+      //       // this.jumpLoginFlag = false;
+      //     }, 1500);
+      //     reject();
+      //   });
+      //   return;
+      // } else
+      if (data.code === 0 || data.code === 200) {
         return resolve(data);
+      } else {
+        uni.showToast({
+          icon: "none",
+          title: (data && data.msg) || "系统错误",
+        });
+        return reject(data);
       }
     } else {
       uni.showToast({

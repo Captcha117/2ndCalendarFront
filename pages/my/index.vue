@@ -10,7 +10,8 @@
       title="我的"
     />
     <my-list :list="menu" @command="handleCommand"> </my-list>
-    <my-tab-bar :index="1" />
+    <!-- TODO -->
+    <my-tab-bar :index="2" />
     <u-popup :show="showLogin" @close="showLogin = false" round="10">
       <view class="popup-content" :style="{ height: height * 0.4 + 'px' }">
         <view class="logo-view">

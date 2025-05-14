@@ -17,10 +17,18 @@
       "path": "pages/timeline/index",
       "style": { "navigationBarTitleText": "时间轴" }
     },
+    { "path": "pages/custom/index", "style": { "navigationStyle": "custom" } },
+    { "path": "pages/custom/add", "style": { "navigationStyle": "custom" } },
     { "path": "pages/my/index", "style": { "navigationStyle": "custom" } },
     { "path": "pages/my/log/index", "style": { "navigationStyle": "custom" } },
-    { "path": "pages/my/account/index", "style": { "navigationStyle": "custom" } },
-    { "path": "pages/my/about/index", "style": { "navigationStyle": "custom" } },
+    {
+      "path": "pages/my/account/index",
+      "style": { "navigationStyle": "custom" }
+    },
+    {
+      "path": "pages/my/about/index",
+      "style": { "navigationStyle": "custom" }
+    },
     { "path": "pages/webview/index" }
   ],
   "globalStyle": {
@@ -38,18 +46,9 @@
     "height": "0.1",
     "custom": true,
     "list": [
-      {
-        "pagePath": "pages/calendar/index",
-        "text": ""
-      },
-      // {
-      //   "pagePath": "pages/timeline/index",
-      //   "text": "时间轴"
-      // }
-      {
-        "pagePath": "pages/my/index",
-        "text": ""
-      }
+      { "pagePath": "pages/calendar/index", "text": "" },
+      { "pagePath": "pages/custom/index", "text": "" },
+      { "pagePath": "pages/my/index", "text": "" }
     ]
   }
 }

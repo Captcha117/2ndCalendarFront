@@ -1,5 +1,9 @@
 <template>
-  <view class="event-remain" :class="className" v-if="getRemainTime() > 0">
+  <view
+    class="event-remain"
+    :class="className"
+    v-if="event.endTime && getRemainTime() > 0"
+  >
     <u-icon
       name="clock"
       :color="color || statusColor || 'white'"
@@ -10,6 +14,14 @@
       :time="getRemainTime()"
       :color="color || statusColor"
     ></count-down>
+  </view>
+  <view class="event-remain" :class="className" v-else-if="!event.endTime">
+    <u-icon
+      name="clock"
+      :color="color || statusColor || 'white'"
+      size="12"
+    ></u-icon>
+    <text style="margin-left: 10rpx">∞</text>
   </view>
 </template>
 

@@ -9,11 +9,10 @@
     background-color="#F8F8F8"
     color="black"
     status-bar
-    title="活动日历"
+    title="我的日历"
   />
   <view class="calendar-page">
     <view class="background" v-if="showList.length">
-      <view class="blank" v-if="showImg"></view>
       <view
         class="date"
         v-for="i in weekArray"
@@ -23,7 +22,6 @@
       </view>
     </view>
     <view class="week">
-      <view class="blank" v-if="showImg"></view>
       <view
         class="date"
         v-for="i in weekArray"
@@ -43,29 +41,6 @@
       @downSlide="opacity = 1"
     >
       <view class="event">
-        <view class="img-list" v-if="showImg">
-          <view
-            v-for="(e, i) in showList"
-            class="img-item"
-            :key="e.id"
-            @click="clickEvent(e)"
-          >
-            <u-image
-              :src="e.imgUrlList[0] || ''"
-              mode="aspectFill"
-              width="100%"
-              height="80rpx"
-            ></u-image>
-            <view
-              class="img-cover"
-              :style="{
-                background: `linear-gradient(to right, transparent, ${
-                  colorMap[e['gameId']]
-                })`,
-              }"
-            ></view>
-          </view>
-        </view>
         <view class="event-list">
           <view
             v-for="(e, i) in showList"
@@ -77,11 +52,10 @@
               :e="e"
               :screenWidth="screenWidth"
               :colorMap="colorMap"
-              :showImg="showImg"
+              :showImg="false"
             ></time-bar>
             <view class="event-text">
               <view class="event-name">{{ e.name }}</view>
-              <event-reward :event="e"></event-reward>
             </view>
             <event-status
               v-if="e.done || e.status != 1"
@@ -107,35 +81,28 @@
       ></event-detail>
     </u-popup>
     <view
-      class="corner-button game-button"
-      :style="{ opacity: showList.length == 0 ? 1 : opacity }"
-      @click="toGameList"
-    >
-      <u--image src="/static/game.svg" width="24px" height="24px"></u--image>
-    </view>
-    <view
       class="corner-button tool-button"
       :style="{ opacity: showList.length == 0 ? 1 : opacity }"
-      @click="toSettings"
+      @click="toAdd"
     >
-      <u-icon name="setting" color="white" size="24"></u-icon>
+      <u-icon name="plus" color="white" size="24"></u-icon>
     </view>
-    <my-tab-bar :index="0" />
+    <my-tab-bar :index="1" />
   </view>
 </template>
 
 <script>
+import { getToken } from "@/utils/auth";
 import dayjs from "@/utils/dayjs";
-import TimeBar from "./timeBar.vue";
-import * as data from "./data.js";
-import EventDetail from "./components/event-detail.vue";
-import EventRemain from "./components/event-remain.vue";
-import EventStatus from "./components/event-status.vue";
-import EventReward from "./components/event-reward.vue";
+import TimeBar from "../calendar/timeBar.vue";
+import EventDetail from "./components/custom-detail.vue";
+import EventRemain from "../calendar/components/event-remain.vue";
+import EventStatus from "../calendar/components/event-status.vue";
+import EventReward from "../calendar/components/event-reward.vue";
 import MyTabBar from "@/components/myTabBar/index.vue";
 import MyScrollView from "@/components/myScrollView/index.vue";
 import { mapGetters } from "vuex";
-import { getEventList, getEventDetailByPostId } from "./api";
+import { getCustomList } from "./api";
 export default {
   components: {
     TimeBar,
@@ -155,7 +122,7 @@ export default {
       lastDay: dayjs().add(6, "day").startOf("day"),
       screenWidth: 0,
       screenHeight: 0,
-      eventList: [],
+      customList: [],
       days: ["日", "一", "二", "三", "四", "五", "六"],
       currentEvent: {},
 
@@ -183,85 +150,79 @@ export default {
     this.handleData();
   },
   computed: {
-    ...mapGetters(["doneList", "settings", "gameList"]),
-    showImg() {
-      return !!this.settings.showImg;
-    },
+    ...mapGetters(["settings", "doneList"]),
     showList() {
-      let { prop, order, status, done } = this.settings;
-      let list = this.eventList.filter(
-        (x) =>
-          (status || []).includes(x.status) && (done || []).includes(x.done)
-      );
-      if (prop == "status") {
-        list.sort((a, b) => {
-          // 定义每个状态的优先级
-          const priority = {
-            "1-false": 0, // 未完成进行中
-            "0-false": 1, // 未开始
-            "1-true": 2, // 已完成（进行中且完成）
-            "2-true": 2, // 已完成（已结束且完成）
-            "2-false": 3, // 已结束
-          };
-          // 根据status和done生成排序键
-          const keyA = `${a.status}-${a.done}`;
-          const keyB = `${b.status}-${b.done}`;
+      // let { prop, order, status, done } = this.settings;
+      // let list = this.customList.filter(
+      //   (x) =>
+      //     (status || []).includes(x.status) && (done || []).includes(x.done)
+      // );
+      // if (prop == "status") {
+      //   list.sort((a, b) => {
+      //     // 定义每个状态的优先级
+      //     const priority = {
+      //       "1-false": 0, // 未完成进行中
+      //       "0-false": 1, // 未开始
+      //       "1-true": 2, // 已完成（进行中且完成）
+      //       "2-true": 2, // 已完成（已结束且完成）
+      //       "2-false": 3, // 已结束
+      //     };
+      //     // 根据status和done生成排序键
+      //     const keyA = `${a.status}-${a.done}`;
+      //     const keyB = `${b.status}-${b.done}`;
 
-          // 比较优先级
-          if (priority[keyA] < priority[keyB]) {
-            return -1;
-          } else if (priority[keyA] > priority[keyB]) {
-            return 1;
-          } else {
-            // 如果优先级相同，则根据状态内部的排序规则排序
-            if (priority[keyA] === 1 && priority[keyB] === 1) {
-              // 未开始的按startTime排序
-              return new Date(a.startTime) - new Date(b.startTime);
-            } else {
-              // 其他状态按endTime排序
-              return new Date(a.endTime) - new Date(b.endTime);
-            }
-          }
-        });
-      } else if (prop == "game") {
-        // 按游戏排序
-        list.sort((a, b) => {
-          if (a.gameId !== b.gameId) {
-            return a.gameId.localeCompare(b.gameId);
-          } else {
-            return new Date(a.endTime) - new Date(b.endTime);
-          }
-        });
-      } else {
-        list.sort((a, b) => {
-          return new Date(a[prop]) - new Date(b[prop]);
-        });
-      }
-      if (order === "desc") {
-        list.reverse();
-      }
-      return list;
+      //     // 比较优先级
+      //     if (priority[keyA] < priority[keyB]) {
+      //       return -1;
+      //     } else if (priority[keyA] > priority[keyB]) {
+      //       return 1;
+      //     } else {
+      //       // 如果优先级相同，则根据状态内部的排序规则排序
+      //       if (priority[keyA] === 1 && priority[keyB] === 1) {
+      //         // 未开始的按startTime排序
+      //         return new Date(a.startTime) - new Date(b.startTime);
+      //       } else {
+      //         // 其他状态按endTime排序
+      //         return new Date(a.endTime) - new Date(b.endTime);
+      //       }
+      //     }
+      //   });
+      // } else if (prop == "game") {
+      //   // 按游戏排序
+      //   list.sort((a, b) => {
+      //     if (a.gameId !== b.gameId) {
+      //       return a.gameId.localeCompare(b.gameId);
+      //     } else {
+      //       return new Date(a.endTime) - new Date(b.endTime);
+      //     }
+      //   });
+      // } else {
+      //   list.sort((a, b) => {
+      //     return new Date(a[prop]) - new Date(b[prop]);
+      //   });
+      // }
+      // if (order === "desc") {
+      //   list.reverse();
+      // }
+      // return list;
+      return this.customList;
     },
     emptyText() {
       if (this.$refs.scroll?.triggered) {
         return "加载中.....";
       }
-      return this.settings?.games?.length > 0
-        ? "暂无活动数据"
-        : "请在设置中选择游戏";
+      return "暂无数据";
     },
     colorMap() {
       let r = {};
-      this.gameList.forEach((g) => {
-        r[g.id] = g.color;
-      });
+      // this.gameList.forEach((g) => {
+      //   r[g.id] = g.color;
+      // });
       return r;
     },
   },
   mounted() {
-    this.$store.dispatch("sys/getGameList").then((_) => {
-      this.startPullDownRefresh();
-    });
+    this.startPullDownRefresh();
   },
   methods: {
     startPullDownRefresh() {
@@ -274,50 +235,49 @@ export default {
     // 刷新
     refresh() {
       if (this.loading) return;
-      this.$store.dispatch("user/getDoneList");
-      this.$store.dispatch("user/getSettings");
-      this.getEventList();
+      this.getCustomList();
     },
-    // 获取事件列表
-    getEventList() {
-      this.loading = true;
-      if (data.test) {
-        this.eventList = data.eventList;
-        this.handleData();
+    // 获取自定义列表
+    getCustomList() {
+      if (!getToken()) {
+        uni.showToast({ icon: "none", title: "请登录后使用此功能" });
+        this.customList = [];
         this.stopPullDownRefresh();
         return;
       }
-      if (this.settings.games.length > 0) {
-        getEventList(this.settings.games)
-          .then((_) => {
-            this.eventList = _.data || [];
-            this.handleData();
-          })
-          .finally(() => {
-            this.loading = false;
-            this.stopPullDownRefresh();
-          });
-      } else {
-        this.eventList = [];
-        this.loading = false;
-        this.stopPullDownRefresh();
-      }
+      this.loading = true;
+      this.showDetail = false;
+      getCustomList()
+        .then((_) => {
+          this.customList = _.data || [];
+          this.handleData();
+        })
+        .finally(() => {
+          this.loading = false;
+          this.stopPullDownRefresh();
+        });
     },
     // 预处理数据
     handleData() {
-      this.eventList.forEach((e, i) => {
+      this.customList.forEach((e, i) => {
         this.$set(
           e,
           "graphStartTime",
-          Math.max(+new Date(this.firstDay), +new Date(e.startTime))
+          Math.max(
+            +new Date(this.firstDay),
+            +new Date(e.startTime || this.firstDay)
+          )
         );
         this.$set(
           e,
           "graphEndTime",
-          Math.min(+new Date(this.lastDay), +new Date(e.endTime))
+          Math.min(
+            +new Date(this.lastDay),
+            +new Date(e.endTime || this.lastDay)
+          )
         );
         this.$set(e, "done", this.doneList.includes(e.id));
-        this.$set(e, "imgUrlList", (e.imgUrl || "").split(";"));
+        // this.$set(e, "imgUrlList", (e.imgUrl || "").split(";"));
         this.getEventStatus(e);
       });
     },
@@ -330,7 +290,6 @@ export default {
     clickEvent(e) {
       this.currentEvent = e;
       this.showDetail = true;
-      // getEventDetailByPostId("60531688");
     },
     maskClick() {
       this.showDetail = false;
@@ -353,11 +312,12 @@ export default {
       // 如果当前时间晚于事件结束时间
       this.$set(e, "status", 2); // 已结束
     },
-    toGameList() {
-      uni.navigateTo({ url: "gameList" });
-    },
-    toSettings() {
-      uni.navigateTo({ url: "settings" });
+    toAdd() {
+      if (!getToken()) {
+        uni.showToast({ icon: "none", title: "请登录后使用此功能" });
+        return;
+      }
+      uni.navigateTo({ url: "add" });
     },
     // 小程序兼容性写法，将 change 事件 emit 出来
     changeStatus() {

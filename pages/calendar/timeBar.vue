@@ -12,8 +12,8 @@
         width: getEventWidth(e) + 'rpx',
         left: getStartTimeOffset(e) + 'rpx',
         background: `linear-gradient(to right, ${
-          colorMap[e.gameId]
-        }, ${mixColorWithWhite(colorMap[e.gameId], 0.25)})`,
+          colorMap[e['gameId']] || '#409eff'
+        }, ${mixColorWithWhite(colorMap[e['gameId']] || '#409eff', 0.25)})`,
       }"
     >
       <view
@@ -60,9 +60,9 @@ export default {
   methods: {
     // 事件长度
     getEventWidth(event) {
-      if (!event.startTime || !event.endTime) {
-        return 0;
-      }
+      // if (!event.startTime || !event.endTime) {
+      //   return 0;
+      // }
       const date1 = dayjs(event.graphStartTime);
       const date2 = dayjs(event.graphEndTime);
       let diff = date2.diff(date1); // 毫秒
