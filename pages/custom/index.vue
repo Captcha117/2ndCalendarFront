@@ -58,7 +58,7 @@
               <view class="event-name">{{ e.name }}</view>
             </view>
             <event-status
-              v-if="e.done || e.status != 1"
+              v-if="e.done"
               class="event-status"
               :event="e"
             ></event-status>

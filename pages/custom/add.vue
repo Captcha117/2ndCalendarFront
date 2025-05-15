@@ -124,6 +124,7 @@
       :maxDate="maxDate"
       :minDate="defaultMinDate"
       v-model="startTime"
+      :filter="filter"
       mode="datetime"
       closeOnClickOverlay
       @confirm="confirmDate"
@@ -134,6 +135,7 @@
       :show="end"
       :maxDate="defaultMaxDate"
       :minDate="minDate"
+      :filter="filter"
       v-model="endTime"
       mode="datetime"
       closeOnClickOverlay
@@ -167,11 +169,14 @@ export default {
         endTime: "",
         type: "默认分类",
       },
+      // 是否显示开始和结束时间选择框
       start: false,
       end: false,
-      startTime: dayjs().format("YYYY-MM-DD HH:mm"),
-      endTime: dayjs().format("YYYY-MM-DD HH:mm"),
+      // 时间选择框上的时间
+      // startTime: dayjs().format("YYYY-MM-DD HH:mm"),
+      // endTime: dayjs().format("YYYY-MM-DD HH:mm"),
       typeList: ["默认分类"],
+      // 默认的时间选择框最大最小的时间
       defaultMaxDate: +dayjs().add(10, "year"),
       defaultMinDate: +dayjs().subtract(10, "year"),
 
@@ -208,6 +213,28 @@ export default {
         return +dayjs().subtract(10, "year");
       }
     },
+    startTime: {
+      get() {
+        return dayjs(this.form.startTime || Number(new Date())).format(
+          "YYYY-MM-DD HH:mm"
+        );
+      },
+      set(newValue, oldValue) {
+        this.form.startTime = dayjs(newValue).format("YYYY-MM-DD HH:mm");
+        this.start = false;
+      },
+    },
+    endTime: {
+      get() {
+        return dayjs(this.form.endTime || Number(new Date())).format(
+          "YYYY-MM-DD HH:mm"
+        );
+      },
+      set(newValue, oldValue) {
+        this.form.endTime = dayjs(newValue).format("YYYY-MM-DD HH:mm");
+        this.start = false;
+      },
+    },
   },
   onReady() {
     // 如果需要兼容微信小程序，并且校验规则中含有方法等，只能通过setRules方法设置规则
@@ -222,7 +249,14 @@ export default {
       api
         .getCustomById(this.form.id)
         .then((_) => {
-          this.form = _.data || {};
+          let data = _.data || {};
+          if (data.startTime) {
+            data.startTime = dayjs(data.startTime).format("YYYY-MM-DD HH:mm");
+          }
+          if (data.endTime) {
+            data.endTime = dayjs(data.endTime).format("YYYY-MM-DD HH:mm");
+          }
+          this.form = data;
         })
         .finally(() => {
           uni.hideLoading();
@@ -233,6 +267,7 @@ export default {
     back() {
       uni.navigateBack({ delta: 1 });
     },
+    // 弹出时间选择框
     selectTime(prop) {
       this.currentProp = prop;
       this[this.currentProp] = true;
@@ -246,11 +281,17 @@ export default {
     },
     confirmDate(e) {
       this[this.currentProp] = false;
-      this.form[this.currentProp + "Time"] = dayjs(e.value).format(
-        "YYYY-MM-DD HH:mm"
-      );
+      // this.form[this.currentProp + "Time"] = dayjs(e.value).format(
+      //   "YYYY-MM-DD HH:mm"
+      // );
     },
-
+    // 分钟只保留5的倍数
+    filter(mode, options) {
+      // if (mode === "minute") {
+      //   return options.filter((option) => option % 5 === 0);
+      // }
+      return options;
+    },
     confirmForm() {
       if (this.form.startTime && this.form.endTime) {
         if (dayjs(this.form.startTime).diff(dayjs(this.form.endTime)) > 0) {

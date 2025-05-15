@@ -2,7 +2,24 @@
   <view
     class="event-remain"
     :class="className"
-    v-if="event.endTime && getRemainTime() > 0"
+    v-if="event.startTime && getStartTimeRemain() > 0"
+  >
+    <u-icon
+      name="hourglass"
+      :color="color || statusColor || 'white'"
+      size="14"
+    ></u-icon>
+    <count-down
+      style="margin-left: 10rpx"
+      :time="getStartTimeRemain()"
+      :color="color || statusColor"
+    ></count-down>
+    <text style="margin-left: 10rpx">后开始</text>
+  </view>
+  <view
+    class="event-remain"
+    :class="className"
+    v-else-if="event.endTime && getEndTimeRemain() > 0"
   >
     <u-icon
       name="clock"
@@ -11,7 +28,7 @@
     ></u-icon>
     <count-down
       style="margin-left: 10rpx"
-      :time="getRemainTime()"
+      :time="getEndTimeRemain()"
       :color="color || statusColor"
     ></count-down>
   </view>
@@ -32,15 +49,24 @@ export default {
   props: ["event", "color"],
   components: { CountDown },
   computed: {
-    getRemainTime() {
+    // 距离结束时间剩余
+    getEndTimeRemain() {
       return () => {
         const date1 = dayjs();
         const date2 = dayjs(this.event.endTime);
         return date2.diff(date1);
       };
     },
+    // 距离开始时间剩余
+    getStartTimeRemain() {
+      return () => {
+        const date1 = dayjs();
+        const date2 = dayjs(this.event.startTime);
+        return date2.diff(date1);
+      };
+    },
     getRemainDay() {
-      return parseInt(this.getRemainTime() / 1000 / 60 / 60 / 24);
+      return parseInt(this.getEndTimeRemain() / 1000 / 60 / 60 / 24);
     },
     className() {
       if (this.getRemainDay <= 3) {
