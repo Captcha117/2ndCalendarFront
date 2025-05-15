@@ -29,7 +29,8 @@ import store from "@/store";
 import { router, whiteListRoutes } from "@/router";
 
 export function getBaseUrl() {
-  let baseUrl = "/api";
+  let baseUrl = "https://captcha117.top/api/second-calendar";
+  // let baseUrl = "http://localhost:8085/second-calendar";
   // baseUrl = uni.getStorageSync(`api_base_url`) || baseUrl;
   return baseUrl;
 }
@@ -98,26 +99,29 @@ const http = {
     }
 
     if (response.statusCode === 200) {
-      // if (data.code === 401) {
-      //   // if (this.jumpLoginFlag) {
-      //   //   return reject();
-      //   // }
-      //   // this.jumpLoginFlag = true;
-      //   store.dispatch("user/resetState").then((_) => {
-      //     setTimeout(() => {
-      //       if (!whiteListRoutes.includes(router.currentRoute.name)) {
-      //         router.$lockStatus = false;
-      //         router.replaceAll({
-      //           name: "login",
-      //         });
-      //       }
-      //       // this.jumpLoginFlag = false;
-      //     }, 1500);
-      //     reject();
-      //   });
-      //   return;
-      // } else
-      if (data.code === 0 || data.code === 200) {
+      if (data.code === 401) {
+        // if (this.jumpLoginFlag) {
+        //   return reject();
+        // }
+        // this.jumpLoginFlag = true;
+        store.dispatch("user/resetState").then((_) => {
+          // setTimeout(() => {
+          //   if (!whiteListRoutes.includes(router.currentRoute.name)) {
+          //     router.$lockStatus = false;
+          //     router.replaceAll({
+          //       name: "login",
+          //     });
+          //   }
+          //   // this.jumpLoginFlag = false;
+          // }, 1500);
+          uni.showToast({
+            icon: "none",
+            title: (data && data.msg) || "请重新登录",
+          });
+          reject();
+        });
+        return;
+      } else if (data.code === 0 || data.code === 200) {
         return resolve(data);
       } else {
         uni.showToast({
