@@ -205,7 +205,22 @@ export default {
       //   list.reverse();
       // }
       // return list;
-      return this.customList;
+      // 默认按开始时间和结束时间排序
+      let list = this.customList;
+      list.sort((a, b) => {
+        if (a.startTime != b.startTime) {
+          return (
+            new Date(a.startTime || "1970-01-01") -
+            new Date(b.startTime || "1970-01-01")
+          );
+        } else {
+          return (
+            new Date(a.endTime || "9999-12-31") -
+            new Date(b.endTime || "9999-12-31")
+          );
+        }
+      });
+      return list;
     },
     emptyText() {
       if (this.$refs.scroll?.triggered) {
