@@ -18,7 +18,7 @@
         class="date"
         v-for="i in weekArray"
         :key="i"
-        :style="{ 'background-color': i == 2 ? '#eeeeee' : '#f5f7fa' }"
+        :style="{ 'background-color': i == 0 ? '#eeeeee' : '#f5f7fa' }"
       >
       </view>
     </view>
@@ -28,10 +28,10 @@
         class="date"
         v-for="i in weekArray"
         :key="-i"
-        :style="{ 'background-color': i == 2 ? '#eeeeee' : 'white' }"
+        :style="{ 'background-color': i == 0 ? '#eeeeee' : 'white' }"
       >
-        <view>{{ addDays(i - 2) }}</view>
-        <view>{{ getDay(i - 2) }}</view>
+        <view>{{ addDays(i) }}</view>
+        <view>{{ getDay(i) }}</view>
       </view>
     </view>
     <my-scroll-view
@@ -78,6 +78,8 @@
               :screenWidth="screenWidth"
               :colorMap="colorMap"
               :showImg="showImg"
+              :firstDay="firstDay"
+              :displayDays="displayDays"
             ></time-bar>
             <view class="event-text">
               <view class="event-name">{{ e.name }}</view>
@@ -150,9 +152,9 @@ export default {
     return {
       loading: false,
 
-      weekArray: new Array(7).fill(1).map((x, i) => i + 1),
       firstDay: dayjs().add(-1, "day").startOf("day"),
-      lastDay: dayjs().add(6, "day").startOf("day"),
+      displayDays: 7,
+
       screenWidth: 0,
       screenHeight: 0,
       eventList: [],
@@ -166,7 +168,7 @@ export default {
   onLoad() {
     uni.getSystemInfo({
       success: (res) => {
-        console.log(res);
+        // console.log(res);
         let rpxWidth = res.windowWidth / (uni.upx2px(100) / 100);
         let rpxHeight = res.windowHeight / (uni.upx2px(100) / 100);
         this.screenWidth = rpxWidth;
@@ -184,6 +186,20 @@ export default {
   },
   computed: {
     ...mapGetters(["doneList", "settings", "gameList"]),
+    // 顶部日期数组
+    weekArray() {
+      return new Array(this.displayDays)
+        .fill(1)
+        .map((x, i) => i + this.daysDiff);
+    },
+    // 最后一天
+    lastDay() {
+      return this.firstDay.add(this.displayDays, "day").startOf("day");
+    },
+    // 第一天与今天的相差的天数
+    daysDiff() {
+      return this.firstDay.diff(dayjs(), "day");
+    },
     showImg() {
       return !!this.settings.showImg;
     },

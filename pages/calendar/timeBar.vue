@@ -35,13 +35,13 @@ import { mapGetters } from "vuex";
 import { mixColorWithWhite } from "@/utils/mainColor";
 export default {
   components: { CountDown, EventReward },
-  props: ["e", "screenWidth", "colorMap", "showImg"],
+  props: ["e", "screenWidth", "colorMap", "showImg", "firstDay", "displayDays"],
   data() {
     return {
       mixColorWithWhite,
       barHeight: 40,
-      firstDay: dayjs().add(-1, "day").startOf("day"),
-      lastDay: dayjs().add(6, "day").startOf("day"),
+      // firstDay: dayjs().add(0, "day").startOf("day"),
+      // lastDay: dayjs().add(3, "day").startOf("day"),
     };
   },
   options: {
@@ -52,8 +52,13 @@ export default {
     virtualHost: true, //  将自定义节点设置成虚拟的，更加接近Vue组件的表现。我们不希望自定义组件的这个节点本身可以设置样式、响应 flex 布局等，而是希望自定义组件内部的第一层节点能够响应 flex 布局或者样式由自定义组件本身完全决定
   },
   computed: {
+    lastDay() {
+      return this.firstDay.add(this.displayDays, "day").startOf("day");
+    },
     widthPerHour() {
-      return (this.screenWidth - (this.showImg ? 160 : 0)) / 7 / 24;
+      return (
+        (this.screenWidth - (this.showImg ? 160 : 0)) / this.displayDays / 24
+      );
     },
   },
   mounted() {},
@@ -74,7 +79,9 @@ export default {
       if (!event.startTime) {
         return 0;
       }
-      const date1 = dayjs().add(-1, "day").startOf("day");
+      const date1 = dayjs()
+        .add(this.firstDay.diff(dayjs(), "day"), "day")
+        .startOf("day");
       const date2 = dayjs(event.graphStartTime);
       let diff = date2.diff(date1); // 毫秒
       let offset = (diff / 1000 / 60 / 60) * this.widthPerHour;
